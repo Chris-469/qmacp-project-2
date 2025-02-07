@@ -1,0 +1,33 @@
+﻿{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "QM Automated Configuration Project API",
+    "description": "API documentation for QM Automated Configuration Project"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Root URL",
+        "responses": {
+          "200": {
+            "description": "Welcome to root URL of Server"
+          }
+        }
+      }
+    },
+    "/authenticate": {
+      "post": {
+        "summary": "Authenticate user",
+        "responses": {
+          "200": {
+            "description": "You are successfully authenticated"
+          }
+        }
+      }
+    }
+  }
+}
