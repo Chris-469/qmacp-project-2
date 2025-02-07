@@ -2,6 +2,7 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
+const { readSysParm } = require('./zosmf-mq-services');
 const app = express();
 const PORT = 3000;
 
@@ -21,6 +22,10 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+let token;
+// Set to true for testing
+let isAuthenticated = true;
+
 /**
  * @swagger
  * /:
@@ -35,6 +40,25 @@ app.get('/', (req, res)=>{
   res.send("Welcome to root URL of Server");
 });
 
+app.get('/sysParm', async (req, res)=>{
+
+    if (isAuthenticated){
+      try {
+        console.log(req.query);
+        const sysParm = await readSysParm(req.query.sysParm,
+                                          req.query.qmName,
+                                          req.cookies.LtpaToken2);
+
+        res.status(200);
+        res.send(`You are successfully authenticated. Parameter value: ${parameterValue}`);
+      } catch (error) {
+        res.status(500).send('Error reading parameter');
+      }
+    } else {
+      res.status(500).send('Error: User not authenticated');
+    }
+});
+
 /**
  * @swagger
  * /authenticate:
@@ -45,7 +69,9 @@ app.get('/', (req, res)=>{
  *         description: You are successfully authenticated
  */
 app.post('/authenticate', (req, res) => {
-  console.log(req.cookies.LtpaToken2);
+  token = req.cookies.LtpaToken2;
+  isAuthenticated = true;
+  console.log("isAuthenticated set to true");
 
   res.send("You are successfully authenticated");
   res.status(200);
