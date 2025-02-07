@@ -10,6 +10,13 @@ app.get('/', (req, res)=>{
   res.send("Welcome to root URL of Server");
 });
 
+app.post('/authenticate', (req, res) => {
+  console.log(req.cookies.LtpaToken2);
+
+  res.send("You are successfully authenticated");
+  res.status(200);
+});
+
 app.listen(PORT, (error) =>{
     if(!error)
         console.log("Server is Successfully Running. Server available at http://localhost:3000 ")
