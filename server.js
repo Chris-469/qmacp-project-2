@@ -1,18 +1,49 @@
 ﻿const cookieParser = require('cookie-parser');
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerJsdoc = require('swagger-jsdoc');
 const app = express();
 const PORT = 3000;
 
-app.use(cookieParser());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'QM Automated Configuration Project API',
+      version: '1.0.0',
+    },
+  },
+  apis: ['./server.js'], // files containing annotations as above
+};
 
+const swaggerSpec = swaggerJsdoc(options);
+
+app.use(cookieParser());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Root URL
+ *     responses:
+ *       200:
+ *         description: Welcome to root URL of Server
+ */
 app.get('/', (req, res)=>{
   res.status(200);
   res.send("Welcome to root URL of Server");
 });
 
+/**
+ * @swagger
+ * /authenticate:
+ *   post:
+ *     summary: Authenticate user
+ *     responses:
+ *       200:
+ *         description: You are successfully authenticated
+ */
 app.post('/authenticate', (req, res) => {
   console.log(req.cookies.LtpaToken2);
 
