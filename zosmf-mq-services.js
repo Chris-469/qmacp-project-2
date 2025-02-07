@@ -10,7 +10,6 @@ const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
  * @returns {Promise<string>} The value of the parameter.
  */
 async function readSysParm(sysParm, qmName, ltpaToken) {
-
   // get the CSQ4ZPRM dataset for this queue manager
   try {
     // Build the request config
@@ -24,19 +23,38 @@ async function readSysParm(sysParm, qmName, ltpaToken) {
       }
     };
 
-    console.log(config);
+    // do the request to zosmf
     const response = await axios.request(config);
 
     // Parse the value from the response
-    const value = response.data.value;
+    const value = await extractParm(response.data, sysParm);
 
-    // Return the value
     return value;
 
   } catch(error) {
     console.error('Error reading parameter:', error);
     throw error;
   }
+}
+
+async function extractParm(jcl, sysParm) {
+  // Split the jcl into lines
+  const lines = jcl.split('\n');
+
+  // Iterate over each line
+  lines.forEach(line => {
+    // Check if the line contains the search string
+    if (line.includes(sysParm)) {
+
+      // Determine if this is the correct line
+      const paramPosition = line.indexOf(sysParm);
+
+      const value = line.substring(paramPosition + sysParm.length + 1,(line.indexOf(",")));
+
+      return value;
+    }
+  });
+  return;
 }
 
 module.exports = {

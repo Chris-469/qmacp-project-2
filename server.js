@@ -44,15 +44,12 @@ app.get('/sysParm', async (req, res)=>{
 
     if (isAuthenticated){
       try {
-        console.log(req.query);
-        const sysParm = await readSysParm(req.query.sysParm,
-                                          req.query.qmName,
-                                          req.cookies.LtpaToken2);
+        const parameterValue = await readSysParm(req.query.sysParm, req.query.qmName, req.cookies.LtpaToken2);
 
-        res.status(200);
-        res.send(`You are successfully authenticated. Parameter value: ${parameterValue}`);
+        res.status(200).send(`You are successfully authenticated. Parameter value: ${parameterValue}`);
       } catch (error) {
-        res.status(500).send('Error reading parameter');
+        console.log(error);
+        res.status(500).send('Error in server.js reading parameter');
       }
     } else {
       res.status(500).send('Error: User not authenticated');
