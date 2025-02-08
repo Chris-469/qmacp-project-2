@@ -68,7 +68,7 @@ async function extractParm(jcl, sysParm) {
         continue;
       }
 
-      // Extract the parameter valu
+      // Extract the parameter value
       const paramPosition = line.indexOf(sysParm);
       const value = line.substring(paramPosition + sysParm.length + 1, line.indexOf(","));
 
