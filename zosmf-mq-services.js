@@ -80,5 +80,6 @@ async function extractParm(jcl, sysParm) {
 }
 
 module.exports = {
-  readSysParm
+  readSysParm,
+  extractParm
 };
