@@ -22,7 +22,6 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-let token;
 // Set to true for testing
 let isAuthenticated = true;
 
@@ -46,9 +45,11 @@ app.get('/sysParm', async (req, res)=>{
       try {
         const parameterValue = await readSysParm(req.query.sysParm, req.query.qmName, req.cookies.LtpaToken2);
 
-        res.status(200).send(`You are successfully authenticated. Parameter value: ${parameterValue}`);
+        // TODO If the value is empty then fetch default value
+
+        res.status(200).send(parameterValue);
       } catch (error) {
-        console.log(error);
+        console.log(error.code);
         res.status(500).send('Error in server.js reading parameter');
       }
     } else {
@@ -66,7 +67,6 @@ app.get('/sysParm', async (req, res)=>{
  *         description: You are successfully authenticated
  */
 app.post('/authenticate', (req, res) => {
-  token = req.cookies.LtpaToken2;
   isAuthenticated = true;
   console.log("isAuthenticated set to true");
 

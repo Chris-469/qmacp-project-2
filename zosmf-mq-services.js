@@ -26,13 +26,22 @@ async function readSysParm(sysParm, qmName, ltpaToken) {
     // do the request to zosmf
     const response = await axios.request(config);
 
+    // Check the response status, only proceed if response succeeded
+    if (response.status != 200) {
+      console.log("An error occured when calling zosmf");
+      console.log(response.status);
+      console.log(response.statusText);
+      return null;
+    } else {
+      console.log("Authentication with zosmf successful");
+    }
+
     // Parse the value from the response
     const value = await extractParm(response.data, sysParm);
-
     return value;
 
   } catch(error) {
-    console.error('Error reading parameter:', error);
+    console.error('Error occured in readSysParm:', error.response.statusMessage);
     throw error;
   }
 }
@@ -42,19 +51,17 @@ async function extractParm(jcl, sysParm) {
   const lines = jcl.split('\n');
 
   // Iterate over each line
-  lines.forEach(line => {
+  for (const line of lines) {
     // Check if the line contains the search string
     if (line.includes(sysParm)) {
-
       // Determine if this is the correct line
       const paramPosition = line.indexOf(sysParm);
-
-      const value = line.substring(paramPosition + sysParm.length + 1,(line.indexOf(",")));
-
+      const value = line.substring(paramPosition + sysParm.length + 1, line.indexOf(","));
+      console.log(value);
       return value;
     }
-  });
-  return;
+  }
+  return null; // Return null if the parameter is not found
 }
 
 module.exports = {
