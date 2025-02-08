@@ -76,7 +76,7 @@ app.post('/authenticate', (req, res) => {
 
 app.listen(PORT, (error) =>{
     if(!error)
-        console.log("Server is Successfully Running. Server available at http://localhost:3000 ")
+        console.log("Server running + available at http://localhost:3000 ")
     else
         console.log("Error occurred, server can't start", error);
     }

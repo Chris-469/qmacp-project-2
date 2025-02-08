@@ -46,6 +46,13 @@ async function readSysParm(sysParm, qmName, ltpaToken) {
   }
 }
 
+// Assisted by watsonx Code Assistant
+/**
+ * Extracts a parameter from a JCL string.
+ * @param {string} jcl - The JCL string to search.
+ * @param {string} sysParm - The parameter to extract.
+ * @returns {string|null} The value of the parameter if found, or null if not found.
+ */
 async function extractParm(jcl, sysParm) {
   // Split the jcl into lines
   const lines = jcl.split('\n');
@@ -54,10 +61,18 @@ async function extractParm(jcl, sysParm) {
   for (const line of lines) {
     // Check if the line contains the search string
     if (line.includes(sysParm)) {
-      // Determine if this is the correct line
+
+      // Check that this line is not a commnet
+      if(line.trim().substring(0,sysParm.length) != sysParm) {
+        console.log("Parm found but not on the correct line");
+        continue;
+      }
+
+      // Extract the parameter valu
       const paramPosition = line.indexOf(sysParm);
       const value = line.substring(paramPosition + sysParm.length + 1, line.indexOf(","));
-      console.log(value);
+
+      // Return the parameter value
       return value;
     }
   }
