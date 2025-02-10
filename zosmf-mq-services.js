@@ -48,7 +48,7 @@ async function readSysParm(sysParm, qmName, ltpaToken) {
 
 // Assisted by watsonx Code Assistant
 /**
- * Extracts a parameter from a JCL string.
+ * Extracts a single parameter from a CSQ4ZPRM formatted JCL job.
  * @param {string} jcl - The JCL string to search.
  * @param {string} sysParm - The parameter to extract.
  * @returns {string|null} The value of the parameter if found, or null if not found.
@@ -91,7 +91,30 @@ async function extractParm(jcl, sysParm) {
   return null; // Return null if the parameter is not found
 }
 
+async function zosmfRequest(config) {
+  try {
+    // Do the request to zosmf
+    const response = await axios.request(config);
+
+    // Return response
+    return {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data
+    };
+
+  } catch(error) {
+    const response  = {
+      "status": 500,
+      "statusMessage" : error.message
+    }
+
+    return response;
+  }
+}
+
 module.exports = {
   readSysParm,
-  extractParm
+  extractParm,
+  zosmfRequest
 };

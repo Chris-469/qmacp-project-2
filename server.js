@@ -2,9 +2,11 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-const { readSysParm } = require('./zosmf-mq-services');
+const { readSysParm, zosmfRequest } = require('./zosmf-mq-services');
 const app = express();
 const PORT = 3000;
+
+const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
 
 const options = {
   definition: {
@@ -66,12 +68,33 @@ app.get('/sysParm', async (req, res)=>{
  *       200:
  *         description: You are successfully authenticated
  */
-app.post('/authenticate', (req, res) => {
-  isAuthenticated = true;
-  console.log("isAuthenticated set to true");
+app.post('/authenticate', async (req, res) => {
 
-  res.send("You are successfully authenticated");
-  res.status(200);
+  // Check that the header field contains an authorization header
+  if (!req.headers.authorization) {
+    return res.status(400).send('Authorization header is missing');
+  }
+
+  // Build the request config
+  let config = {
+    method: 'post',
+    timeout: 10000,
+    maxBodyLength: Infinity,
+    url: zosmfURL + 'services/authenticate',
+    headers: {
+      'Authorization' : req.headers.authorization
+    }
+  };
+
+  // Call the authenticate endpoint
+  const response = await zosmfRequest(config);
+
+  // Send the response
+  res.status(response.status);
+      res.send({
+        'status': response.status,
+        'statusText': response.statusText
+      });
 });
 
 app.listen(PORT, (error) =>{
