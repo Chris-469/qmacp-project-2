@@ -58,19 +58,31 @@ async function extractParm(jcl, sysParm) {
   const lines = jcl.split('\n');
 
   // Iterate over each line
-  for (const line of lines) {
+  for (let line of lines) {
     // Check if the line contains the search string
     if (line.includes(sysParm)) {
 
-      // Check that this line is not a commnet
-      if(line.trim().substring(0,sysParm.length) != sysParm) {
+      // Extract the start position of parameter
+      const paramPosition = line.indexOf(sysParm);
+
+      // Check that this line is not a comment, jcl statement or inside another parameter word
+      if(line.substring(0,2) == "//" ||
+         line.substring(paramPosition + sysParm.length, paramPosition + sysParm.length + 1) != "=" ||
+         line.substring(paramPosition - 1, paramPosition) != " ") {
         console.log("Parm found but not on the correct line");
         continue;
       }
 
-      // Extract the parameter value
-      const paramPosition = line.indexOf(sysParm);
-      const value = line.substring(paramPosition + sysParm.length + 1, line.indexOf(","));
+      // Find the position of the value using the first space
+      let endPos = line.indexOf(" ", paramPosition + sysParm.length);
+
+      // Account for commas at the end of lines
+      if (line.substring(endPos - 1, endPos) == ",") {
+        endPos -= 1;
+      }
+
+      // Extract the actual value from the line
+      const value = line.substring(paramPosition + sysParm.length + 1, endPos);
 
       // Return the parameter value
       return value;

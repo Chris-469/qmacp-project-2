@@ -12,7 +12,7 @@ describe('readSysParm', () => {
     const ltpaToken = 'dummy-token';
     const mockResponse = {
       status: 200,
-      data: 'TESTPARM=VALUE,'
+      data: '   TESTPARM=VALUE,   ' // Need to have a space after it
     };
 
     axios.request.mockResolvedValue(mockResponse);
