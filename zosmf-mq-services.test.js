@@ -2,6 +2,9 @@
 const path = require('path');
 const { readSysParm, extractParm } = require('./zosmf-mq-services');
 const axios = require('axios');
+const http = require('http');
+
+const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
 
 jest.mock('axios');
 
@@ -12,28 +15,28 @@ describe('readSysParm', () => {
     const ltpaToken = 'dummy-token';
     const mockResponse = {
       status: 200,
-      data: '   TESTPARM=VALUE,   ' // Need to have a space after it
+      data: '   TESTPARM=VALUE,   ' // Need to have a space after and before value to mathc CSQ4ZPRM formatting
     };
 
     axios.request.mockResolvedValue(mockResponse);
 
     const value = await readSysParm(sysParm, qmName, ltpaToken);
-    expect(value).toBe('VALUE');
+    expect(value.data).toBe('VALUE');
   });
 
-  it('should return null if the response status is not 200', async () => {
+  it('should return status 401 for an invalid LtpaToken2', async () => {
     const sysParm = 'TESTPARM';
     const qmName = 'QM1';
     const ltpaToken = 'dummy-token';
     const mockResponse = {
-      status: 500,
+      status: 401,
       statusText: 'Internal Server Error'
     };
 
     axios.request.mockResolvedValue(mockResponse);
 
     const value = await readSysParm(sysParm, qmName, ltpaToken);
-    expect(value).toBeNull();
+    expect(value.status).toBe(401);
   });
 });
 
