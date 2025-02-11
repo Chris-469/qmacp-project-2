@@ -2,8 +2,9 @@
 
 const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
 
+// Assisted by watsonx Code Assistant
 /**
- * Read a system parameter from CSQ4ZPRM.
+ * Read one or more system parameters from CSQ4ZPRM.
  * @param {string} sysParm - The system parameter to read.
  * @param {string} qmName - The queue manager name.
  * @param {string} ltpaToken - The LTTP token.
@@ -24,25 +25,28 @@ async function readSysParm(sysParm, qmName, ltpaToken) {
     };
 
     // do the request to zosmf
-    const response = await axios.request(config);
+    let response = await axios.request(config);
 
     // Check the response status, only proceed if response succeeded
     if (response.status != 200) {
-      console.log("An error occured when calling zosmf");
-      console.log(response.status);
-      console.log(response.statusText);
-      return null;
-    } else {
-      console.log("Authentication with zosmf successful");
+      return response;
     }
 
     // Parse the value from the response
     const value = await extractParm(response.data, sysParm);
-    return value;
+    response.data = value;
+    return response;
 
   } catch(error) {
-    console.error('Error occured in readSysParm:', error.response.statusMessage);
-    throw error;
+    console.error('Error occured in readSysParm');
+
+    // Return all other axios errors and use optional chaining and default values to catch misc errors
+    return {
+      status: error.response?.status || 500,
+      statusText: error.response?.statusText || 'Internal Server Error',
+      data: error.response?.data || error.message
+    };
+
   }
 }
 
@@ -91,25 +95,39 @@ async function extractParm(jcl, sysParm) {
   return null; // Return null if the parameter is not found
 }
 
+// Assisted by watsonx Code Assistant
+/**
+ * Make a request to z/OSMF using the provided configuration.
+ * @param {object} config - The configuration object for the request.
+ * @returns {Promise<object>} - A promise that resolves to an object containing the response status, status text, and data.
+ */
 async function zosmfRequest(config) {
   try {
     // Do the request to zosmf
     const response = await axios.request(config);
 
-    // Return response
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      data: response.data
-    };
+    // Return response andf the cookie
+    return response;
 
   } catch(error) {
-    const response  = {
-      "status": 500,
-      "statusMessage" : error.message
-    }
+      // Handle axios errors
+      console.log("An axios error occurred in zosmfRequest");
 
-    return response;
+      // Check for timeout error
+      if(error.code == 'ECONNABORTED') {
+        return {
+          status: 501,
+          statusText: 'Request to z/OSMF exceeded timeout',
+          data: 'The request from the API server to the z/OSMF server exceeded the timout window. This usually means there is a problem with z/OSMF on PLEX1 so please check that the z/OSMF server is active before continuing.'
+        };
+      }
+
+      // Return all other axios errors and use optional chaining and default values to catch misc errors
+      return {
+        status: error.response?.status || 500,
+        statusText: error.response?.statusText || 'Internal Server Error',
+        data: error.response?.data || error.message
+      };
   }
 }
 

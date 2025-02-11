@@ -41,22 +41,19 @@ app.get('/', (req, res)=>{
   res.send("Welcome to root URL of Server");
 });
 
+
 app.get('/sysParm', async (req, res)=>{
 
-    if (isAuthenticated){
-      try {
-        const parameterValue = await readSysParm(req.query.sysParm, req.query.qmName, req.cookies.LtpaToken2);
+  // Pass the relevant fields to the readSysParm function and wait for the response
+  const response = await readSysParm(req.query.sysParm, req.query.qmName, req.cookies.LtpaToken2);
 
-        // TODO If the value is empty then fetch default value
-
-        res.status(200).send(parameterValue);
-      } catch (error) {
-        console.log(error.code);
-        res.status(500).send('Error in server.js reading parameter');
-      }
-    } else {
-      res.status(500).send('Error: User not authenticated');
-    }
+  // Send the response
+  res.status(response.status);
+  res.send({
+    'status': response.status,
+    'statusText': response.statusText,
+    'data': response.data
+  });
 });
 
 /**
@@ -64,15 +61,38 @@ app.get('/sysParm', async (req, res)=>{
  * /authenticate:
  *   post:
  *     summary: Authenticate user
+ *     description: Authenticate with the server using your z/OSMF credentials to obtain an LtpaToken2 to authenticate subsequent requests.
+ *     parameters:
+ *       - name: Authorization
+ *         description: 'Basic Authentication header. Basic authentication is a method for HTTP user agents, such as web browsers, to provide a user ID and password when making a request to a protected resource.
+ *                       To use Basic authentication, a header field of Authorization: Basic <credentials> will be needed, where credentials are the base64 encoding of the ID and password conjoined by a single colon :.
+ *                       For example: Authorization: Basic dGVzdDEyMzQ6dGVzdDEyMzQ='
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
  *         description: You are successfully authenticated
+ *       400:
+ *         description: Authorization header missing
+ *       401:
+ *         description: Credentials invalid
+ *       500:
+ *         description: Internal server error
+ *       501:
+ *         description: z/OSMF server inactive
  */
 app.post('/authenticate', async (req, res) => {
 
   // Check that the header field contains an authorization header
   if (!req.headers.authorization) {
-    return res.status(400).send('Authorization header is missing');
+    const authHeaderMissing = {
+      'status': 400,
+      'statusText': 'Authorization header missing',
+      'data': 'A basic authentication header is required to authenticate successfully. Use by attaching a header field of Authorization: Basic <credentials> to your request, where credentials are the base64 encoding of the ID and password conjoined by a single colon.'
+    }
+
+    return res.status(400).send(authHeaderMissing);
   }
 
   // Build the request config
@@ -89,12 +109,20 @@ app.post('/authenticate', async (req, res) => {
   // Call the authenticate endpoint
   const response = await zosmfRequest(config);
 
+  // Set the headers from the axios response to the express response by iterating over each header
+  if (response.headers != null) {
+    Object.keys(response.headers).forEach(key => {
+      res.setHeader(key, response.headers[key]);
+    });
+  }
+
   // Send the response
   res.status(response.status);
-      res.send({
-        'status': response.status,
-        'statusText': response.statusText
-      });
+  res.send({
+    'status': response.status,
+    'statusText': response.statusText,
+    'data': response.data
+  });
 });
 
 app.listen(PORT, (error) =>{
