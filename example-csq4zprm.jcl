@@ -128,7 +128,7 @@
 //            SPACE=(400,(100,100,1))
 //SYSPRINT DD SYSOUT=*
 //SYSIN    DD *
-         CSQ6SYSP                                                      X
+         c                                                      X
                ACELIM=0,             MAX ACE STORAGE POOL SIZE(KB)     X
                CLCACHE=STATIC,       CLUSTER CACHE TYPE                X
                CMDUSER=CSQOPR,       DEFAULT USERID FOR COMMANDS       X

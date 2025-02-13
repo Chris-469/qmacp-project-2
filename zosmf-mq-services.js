@@ -10,7 +10,17 @@ const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
  * @param {string} ltpaToken - The LTTP token.
  * @returns {Promise<string>} The value of the parameter.
  */
-async function readSysParm(sysParm, qmName, ltpaToken) {
+async function readSysParms(ltpaToken, requestBody) {
+
+  // Extract the queue manager name from the request body
+  const qmName = requestBody.qmName;
+  let returnValue = {};
+
+  // Check whether we need to extract all system parameters from csq4zprm
+  if(!requestBody.sysParms) {
+    requestBody.sysParms = 'ALL';
+  }
+  
   // get the CSQ4ZPRM dataset for this queue manager
   try {
     // Build the request config
@@ -25,17 +35,43 @@ async function readSysParm(sysParm, qmName, ltpaToken) {
     };
 
     // do the request to zosmf
-    let response = await axios.request(config);
+    let zosmfResponse = await zosmfRequest(config);
 
-    // Check the response status, only proceed if response succeeded
-    if (response.status != 200) {
-      return response;
+    // Check the zosmfResponse status, only proceed if zosmfResponse succeeded
+    if (zosmfResponse.status != 200) {
+      return zosmfResponse;
     }
 
-    // Parse the value from the response
-    const value = await extractParm(response.data, sysParm);
-    response.data = value;
-    return response;
+    // Parse the system parameters from the csq4zprm file
+    if(requestBody.sysParms == 'ALL') {
+      // Iterate over all parameters and add each one to a response JSON
+      const requestSysParms = 'ALL';
+    } 
+    else
+    {
+      // Check if the last character of sysParms is a comma and remove it if necessary
+      while (requestBody.sysParms.endsWith(',')) {
+        requestBody.sysParms = requestBody.sysParms.slice(0, -1);
+      }
+
+      // Return only the selected system parameters
+      const requestSysParms = requestBody.sysParms.split(',');
+      console.log(requestSysParms);
+
+      // Loop through all requested sysparms and return each one
+      for (const parm of requestSysParms) {
+        // Extract the value of the parameter
+        const value = await extractParm(zosmfResponse.data, parm);
+
+        // Add it to the response
+        returnValue[parm] = value;
+      }
+    }
+    return {
+      status: 200,
+      statusText: 'Request successful',
+      data: returnValue
+    }
 
   } catch(error) {
     console.error('Error occured in readSysParm');
@@ -59,6 +95,7 @@ async function readSysParm(sysParm, qmName, ltpaToken) {
  */
 async function extractParm(jcl, sysParm) {
   // Split the jcl into lines
+  console.log("Extract parm called to look for " + sysParm);
   const lines = jcl.split('\n');
 
   // Iterate over each line
@@ -66,6 +103,8 @@ async function extractParm(jcl, sysParm) {
     // Check if the line contains the search string
     if (line.includes(sysParm)) {
 
+      console.log("FOUND IT");
+      console.log(line);
       // Extract the start position of parameter
       const paramPosition = line.indexOf(sysParm);
 
@@ -132,7 +171,7 @@ async function zosmfRequest(config) {
 }
 
 module.exports = {
-  readSysParm,
+  readSysParms,
   extractParm,
   zosmfRequest
 };

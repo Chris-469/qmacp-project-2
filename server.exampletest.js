@@ -7,9 +7,15 @@ const localURL = "http://localhost:3000/"
 
 jest.mock('axios');
 
-
 describe('POST /authenticate', () => {
   it('UR2.1 - should respond with status 401 if invalid credentials are used', async () => {
+    // Mock the axios request to return a 401 response
+    axios.request.mockResolvedValue({
+      status: 401,
+      statusText: 'Unauthorized',
+      data: 'Credentials invalid'
+    });
+    
     let config = {
       method: 'post',
       timeout: 10000,

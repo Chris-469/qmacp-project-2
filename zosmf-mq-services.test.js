@@ -1,6 +1,6 @@
 ﻿const fs = require('fs');
 const path = require('path');
-const { readSysParm, extractParm } = require('./zosmf-mq-services');
+const { readSysParms, extractParm } = require('./zosmf-mq-services');
 const axios = require('axios');
 const http = require('http');
 
@@ -8,7 +8,7 @@ const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
 
 jest.mock('axios');
 
-describe('readSysParm', () => {
+describe('readSysParms', () => {
   it('should return the value of the system parameter', async () => {
     const sysParm = 'TESTPARM';
     const qmName = 'QM1';
@@ -20,7 +20,7 @@ describe('readSysParm', () => {
 
     axios.request.mockResolvedValue(mockResponse);
 
-    const value = await readSysParm(sysParm, qmName, ltpaToken);
+    const value = await readSysParms(sysParm, qmName, ltpaToken);
     expect(value.data).toBe('VALUE');
   });
 
@@ -35,7 +35,7 @@ describe('readSysParm', () => {
 
     axios.request.mockResolvedValue(mockResponse);
 
-    const value = await readSysParm(sysParm, qmName, ltpaToken);
+    const value = await readSysParms(sysParm, qmName, ltpaToken);
     expect(value.status).toBe(401);
   });
 });

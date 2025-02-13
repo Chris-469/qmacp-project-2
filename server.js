@@ -2,7 +2,7 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-const { readSysParm, zosmfRequest } = require('./zosmf-mq-services');
+const { readSysParms, zosmfRequest } = require('./zosmf-mq-services');
 const app = express();
 const PORT = 3000;
 
@@ -22,6 +22,8 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 app.use(cookieParser());
+app.use(express.json()); // Middleware to parse JSON payloads
+app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded payloads
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Set to true for testing
@@ -42,10 +44,30 @@ app.get('/', (req, res)=>{
 });
 
 
-app.get('/sysParm', async (req, res)=>{
+app.get('/qm-sysparms', async (req, res)=>{
 
+  // Check if the request is missing queue manager name
+  if (!req.body.qmName) {
+    // Return 400 since queue manager name is missing
+    return {
+      'status': 400,
+      'statusText': 'Mandatory parameter qmName is missing',
+      'data': 'The request failed because the mandatory qmName field was missing from the body. Please try again and provide a valid qmName field'
+    }
+  }
+
+  // Check if the request is missing an LtpaToken2
+  if (!req.cookies.LtpaToken2) {
+    // Return 400 since queue manager name is missing
+    return {
+      'status': 400,
+      'statusText': 'Mandatory request header LtpaToken2 is missing',
+      'data': 'The request failed because request header did not include an LtpaToken2 token. Please try again and provide a valid LtpaToken2. If you do not have an LtpaToken2 yet, us the /authenticate endpoint to get one'
+    }
+  }
+  
   // Pass the relevant fields to the readSysParm function and wait for the response
-  const response = await readSysParm(req.query.sysParm, req.query.qmName, req.cookies.LtpaToken2);
+  const response = await readSysParms(req.cookies.LtpaToken2, req.body);
 
   // Send the response
   res.status(response.status);
@@ -121,7 +143,7 @@ app.post('/authenticate', async (req, res) => {
   res.send({
     'status': response.status,
     'statusText': response.statusText,
-    'data': response.data
+    'data': response.data.message
   });
 });
 
