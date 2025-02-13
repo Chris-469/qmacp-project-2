@@ -106,6 +106,8 @@ app.get('/qm-sysparms', async (req, res)=>{
  */
 app.post('/authenticate', async (req, res) => {
 
+  console.log("Authenticte endpoint was called");
+  
   // Check that the header field contains an authorization header
   if (!req.headers.authorization) {
     const authHeaderMissing = {

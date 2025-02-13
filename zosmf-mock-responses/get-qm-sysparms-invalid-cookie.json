@@ -1,0 +1,48 @@
+{
+  "status": 401,
+  "statusText": "Unauthorized",
+  "headers": {
+    "x-powered-by": "Servlet/3.1",
+    "www-authenticate": "Basic realm=\"defaultRealm\"",
+    "content-language": "en-US",
+    "strict-transport-security": "max-age=31536000; includeSubDomains",
+    "content-length": "0",
+    "set-cookie": "LtpaToken2=\"\"; Expires=Thu, 01 Dec 1994 16:00:00 GMT; Path=/; Secure; HttpOnly",
+    "date": "Thu, 13 Feb 2025 15:05:59 GMT",
+    "expires": "Thu, 01 Dec 1994 16:00:00 GMT",
+    "cache-control": "no-cache=\"set-cookie, set-cookie2\""
+  },
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 10000,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": null,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Cookie": "LtpaToken2=LcBUxQyEaxEuSSP/vN+gKVIQPwp00XjKFCjkb3pfZbOalv7qWfk95R/VjHEX9QE1+pHZzE6ZucvkfI56XdwHy21REzDyll6DRQx916GRxNkW12L2ohyJ2c/xxG7MRzYUpPyc1AfV0RYHGl6x0hVak27UsA8Xs8YnX5ENvGMHA6hQJbA78jE+6dmmIz7z0Xheml7rnOcYfp87/qPh1NKrIdJVrtRplHvCElWvU2uBs58YLZmmCuBOqtHxOYWIaGEae/QX8eBrtSHtPE2q53sV4fc4h9N7oBHYU8czei0X9",
+      "User-Agent": "axios/1.7.9",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "get",
+    "url": "https://winmvs3c.hursley.ibm.com:32070/zosmf/restfiles/ds/VICY.MQ1A.V9XX.SCSQPROC(CSQ4ZPRM)"
+  },
+  "data": null
+}
