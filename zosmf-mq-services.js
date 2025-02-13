@@ -1,4 +1,6 @@
 ﻿const axios = require('axios');
+const path = require('path');
+const fs = require('fs');
 
 const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
 
@@ -14,7 +16,7 @@ async function readSysParms(ltpaToken, requestBody) {
 
   // Extract the queue manager name from the request body
   const qmName = requestBody.qmName;
-  let returnValue = {};
+  let returnParameters = {};
 
   // Check whether we need to extract all system parameters from csq4zprm
   if(!requestBody.sysParms) {
@@ -44,8 +46,23 @@ async function readSysParms(ltpaToken, requestBody) {
 
     // Parse the system parameters from the csq4zprm file
     if(requestBody.sysParms == 'ALL') {
+      
+      console.log("Reading all parameters from json file");
+      
+      // Read the contents of system-parameters.json into a variable
+      const systemParametersPath = path.join(__dirname, 'system-parameters.json');
+      const systemParametersContent = fs.readFileSync(systemParametersPath, 'utf8');
+      const allSystemParameters = JSON.parse(systemParametersContent);
+
       // Iterate over all parameters and add each one to a response JSON
-      const requestSysParms = 'ALL';
+      Object.keys(allSystemParameters).forEach(async key => {
+        // Get the value of the parameter
+        const value = await extractParm(zosmfResponse.data, allSystemParameters[key]);
+        
+        // Add the parameter to the return value
+        returnParameters[allSystemParameters[key]] = value;
+      });
+      
     } 
     else
     {
@@ -56,7 +73,6 @@ async function readSysParms(ltpaToken, requestBody) {
 
       // Return only the selected system parameters
       const requestSysParms = requestBody.sysParms.split(',');
-      console.log(requestSysParms);
 
       // Loop through all requested sysparms and return each one
       for (const parm of requestSysParms) {
@@ -64,13 +80,13 @@ async function readSysParms(ltpaToken, requestBody) {
         const value = await extractParm(zosmfResponse.data, parm);
 
         // Add it to the response
-        returnValue[parm] = value;
+        returnParameters[parm] = value;
       }
     }
     return {
       status: 200,
       statusText: 'Request successful',
-      data: returnValue
+      data: returnParameters
     }
 
   } catch(error) {
@@ -95,16 +111,12 @@ async function readSysParms(ltpaToken, requestBody) {
  */
 async function extractParm(jcl, sysParm) {
   // Split the jcl into lines
-  console.log("Extract parm called to look for " + sysParm);
   const lines = jcl.split('\n');
 
   // Iterate over each line
   for (let line of lines) {
     // Check if the line contains the search string
     if (line.includes(sysParm)) {
-
-      console.log("FOUND IT");
-      console.log(line);
       // Extract the start position of parameter
       const paramPosition = line.indexOf(sysParm);
 
