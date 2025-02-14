@@ -5,34 +5,20 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
-//jest.mock("axios"); // Mock axios
-const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
-const localHostURL = "http://localhost:3000/"
+jest.mock("axios"); // Mock axios
+const serverURL = "http://QmAutoConfigProject1.fyre.ibm.com:3000/"
 const ltpaToken = "LtpaToken2=LcBUxQyEaxEuSSP/vN+gKVIQPwp00XjKFkc+8lYtxRuJk/pjhnXpIkOQCjkb3pfZbOalv7qWfk95R/VjHEX9QE1+pHZzE6ZucvkfI56XdwHy21REzDyll6DRQx916GRxNkW12L2ohyJ2c/xxG7MRzYUpPyc1AfV0RYHGl6x0hVak27UsA8Xs8YnX5ENvGMHA6hQJbA78jE+6dmmIz7z0Xheml7rnOcYfp87/qPh1NKrIdJVrtRplHvCElWvU2uBs58YLZmmCuBOqtHxOYWIaGEae/QX8eBrtSHtPE2q53sV4fc4h9N7oBHYU8czei0X9; Path=/; Secure; HttpOnly;"
-
-// Import your server code here
-require('./server');
-let server;
 
 // Since I'm mocking the axios request responses, the config can be anything
 let config = {
   method: 'get',
   timeout: 10000,
   maxBodyLength: Infinity,
-  //url: zosmfURL + 'restfiles/ds/VICY.MQ1A.V9XX.SCSQPROC(CSQ4ZPRM)',
-  url: localHostURL + 'qm-sysparms',
+  url: serverURL + 'qm-sysparms',
   headers: {
     'Cookie': ltpaToken
     }
   }
-
-beforeAll((done) => {
-  server = app.listen(PORT, done);
-});
-
-afterAll((done) => {
-  server.close(done);
-});
 
 // describe('POST /authenticate', () => {
 //   it('UR1.1 - should respond with status 200, an informative status message and an LtpaToken2 cookie if valid credentials are used', async () => {
@@ -88,7 +74,7 @@ afterAll((done) => {
 //   });
 // });
 
-describe('GET dataset from z/OSMF on 3C',  () => {
+describe('GET dataset API server',  () => {
   it('UR1.1 - should respond with status 200', async () => {
 
    // Execute the request

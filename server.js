@@ -39,6 +39,7 @@ let isAuthenticated = true;
  *         description: Welcome to root URL of Server
  */
 app.get('/', (req, res)=>{
+  console.log("Root URL was accessed");
   res.status(200);
   res.send("Welcome to root URL of Server");
 });
@@ -75,6 +76,7 @@ app.get('/', (req, res)=>{
  *         description: z/OSMF server inactive
  */
 app.get('/qm-sysparms', async (req, res)=>{
+  console.log("GET /qm-sysparms endpoint was called");
 
   // Check if the request is missing queue manager name
   if (!req.body.qmName) {
@@ -136,8 +138,7 @@ app.get('/qm-sysparms', async (req, res)=>{
  *         description: z/OSMF server inactive
  */
 app.post('/authenticate', async (req, res) => {
-
-  console.log("Authenticte endpoint was called");
+  console.log("POST /authenticte endpoint was called");
 
   // Check that the header field contains an authorization header
   if (!req.headers.authorization) {
