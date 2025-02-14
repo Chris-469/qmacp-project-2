@@ -6,8 +6,8 @@ const app = express();
 const PORT = 3000;
 
 jest.mock("axios"); // Mock axios
-const serverURL = "http://QmAutoConfigProject1.fyre.ibm.com:3000/"
-const ltpaToken = "LtpaToken2=LcBUxQyEaxEuSSP/vN+gKVIQPwp00XjKFkc+8lYtxRuJk/pjhnXpIkOQCjkb3pfZbOalv7qWfk95R/VjHEX9QE1+pHZzE6ZucvkfI56XdwHy21REzDyll6DRQx916GRxNkW12L2ohyJ2c/xxG7MRzYUpPyc1AfV0RYHGl6x0hVak27UsA8Xs8YnX5ENvGMHA6hQJbA78jE+6dmmIz7z0Xheml7rnOcYfp87/qPh1NKrIdJVrtRplHvCElWvU2uBs58YLZmmCuBOqtHxOYWIaGEae/QX8eBrtSHtPE2q53sV4fc4h9N7oBHYU8czei0X9; Path=/; Secure; HttpOnly;"
+const serverURL = "http://9.20.194.48:3000/"
+const ltpaToken = "LtpaToken2=EOtiPsKmrWQov1Qcx8l9n2igXqcbxHHyjS89nGpV4Rl2XyNWieyeQ8jJw+vZY8QynnBl18pBuS6kIrMiVXEi8jIqfCSBbMFoGmHpYHg1mMKZ4tNIi8hL5VaPk2sPMD0yKCeuLSZ1KVNl99rp1+EMfvNVG8QDrtz5e/iHqxO9mjsVLcIZi1ye82gONC4D5S9lq7zvtX7gXGYghPvyhIe4lvwAmkWc1Pw7iXpwuvM6cVw4INo4OiEdj+kW3nD1hKyBk1q90Ac/tCidit2rIRmONyNYYFXE8weW/3X+W8uYML2pTg7jOZE2igK4GeMNvbmH"
 
 // Since I'm mocking the axios request responses, the config can be anything
 let config = {
