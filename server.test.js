@@ -98,7 +98,7 @@ describe('Test the qmacp server is running',  () => {
 });
 
 describe('Test the POST /authenticate endpoint ',  () => {
-  it('should respond with status 200, an informative message and an LtpaToken2 if valid credentials are used', async () => {
+  it('should respond with status 400, an informative message and no cookies if no credentials are provided', async () => {
 
     let config = {
       method: 'post',
@@ -107,6 +107,29 @@ describe('Test the POST /authenticate endpoint ',  () => {
       url: serverURL + "authenticate",
       headers: {
         //'Authorization': 'Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHkz', 
+        }
+      }
+
+    try{
+       // execute the request to the server
+       const response = await axios.request(config);
+       expect(response.status).toBe(400); 
+    } catch(e) {
+       console.log("An error occurred");
+       const response = e?.status || e.message;
+       expect(response).toBe(400); 
+    }
+  });
+  
+  it('should respond with status 200, an informative message and an LtpaToken2 if valid credentials are used', async () => {
+
+    let config = {
+      method: 'post',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "authenticate",
+      headers: {
+        'Authorization': 'Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHkz', 
         }
       }
 

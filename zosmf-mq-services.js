@@ -173,6 +173,7 @@ async function zosmfRequest(config) {
       }
 
       // Return all other axios errors and use optional chaining and default values to catch misc errors
+      console.log(error);
       return {
         status: error.response?.status || 500,
         statusText: error.response?.statusText || 'Internal Server Error',
