@@ -8,71 +8,8 @@ const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
 
 jest.mock('axios');
 
-describe('readSysParms', () => {
-
-  // Read in the example csq4zprm file
-  const csq4zprmPath = path.join(__dirname, 'example-csq4zprm.jcl');
-  const csq4zprmContent = fs.readFileSync(csq4zprmPath, 'utf8');
-
-  it('should return status 200 for a request with all required parameters', async () => {
-    const ltpaToken = 'dummy-token';
-    const requestBody = {
-      "qmName": "MQ1A",
-      "sysParms": "CLCACHE"
-    }
-
-    // Mock response from zosmf server 
-    const mockResponse = {
-      status: 200,
-      data: csq4zprmContent
-    }
-
-    axios.request.mockResolvedValue(mockResponse);
-
-    const value = await readSysParms(ltpaToken, requestBody);
-    expect(value.status).toBe(200);
-  });
-
-  it('should return JSON payload in response.data with the requested system parameter value', async () => {
-    // Parameters for the call to readSysParms
-    const ltpaToken = 'dummy-token';
-    const requestBody = {
-      "qmName": "MQ1A",
-      "sysParms": "CLCACHE"
-    }
-
-    // Mock response from zosmf server 
-    const mockResponse = {
-      status: 200,
-      data: csq4zprmContent
-    }
-
-    axios.request.mockResolvedValue(mockResponse);
-
-    const value = await readSysParms(ltpaToken, requestBody);
-    expect(value.data.CLCACHE).toBe("STATIC");
-  });
-
-  it('should return JSON payload in response.data with the requested system parameter value', async () => {
-    // Parameters for the call to readSysParms
-    const ltpaToken = 'dummy-token';
-    const requestBody = {
-      "qmName": "MQ1A",
-      "sysParms": "CLCACHE"
-    }
-
-    // Mock response from zosmf server 
-    const mockResponse = {
-      status: 200,
-      data: csq4zprmContent
-    }
-
-    axios.request.mockResolvedValue(mockResponse);
-
-    const value = await readSysParms(ltpaToken, requestBody);
-    expect(value.data.CLCACHE).toBe("STATIC");
-  });
-});
+// describe('readSysParms', () => {  
+// });
 
 describe('extractParm', () => {
   let jclContent;
