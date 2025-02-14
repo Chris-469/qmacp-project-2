@@ -87,21 +87,21 @@ app.get('/qm-sysparms', async (req, res)=>{
   // Check if the request is missing queue manager name
   if (!req.body.qmName) {
     // Return 400 since queue manager name is missing
-    return {
+    return res.status(400).send({
       'status': 400,
       'statusText': 'Mandatory parameter qmName is missing',
       'data': 'The request failed because the mandatory qmName field was missing from the body. Please try again and provide a valid qmName field'
-    }
+    });
   }
 
   // Check if the request is missing an LtpaToken2
   if (!req.cookies.LtpaToken2) {
     // Return 400 since queue manager name is missing
-    return {
+    return res.status(400).send({
       'status': 400,
       'statusText': 'Mandatory request header LtpaToken2 is missing',
       'data': 'The request failed because request header did not include an LtpaToken2 token. Please try again and provide a valid LtpaToken2. If you do not have an LtpaToken2 yet, us the /authenticate endpoint to get one'
-    }
+    });
   }
   
   // Pass the relevant fields to the readSysParm function and wait for the response
@@ -175,6 +175,12 @@ app.post('/authenticate', async (req, res) => {
   // Set the headers from the axios response to the express response by iterating over each header
   if (response.headers != null) {
     Object.keys(response.headers).forEach(key => {
+      // Remove either Content-Length or Transfer-Encoding if both are present
+      if (key.toLowerCase() === 'content-length' && response.headers['transfer-encoding']) {
+        delete response.headers[key];
+      } else if (key.toLowerCase() === 'transfer-encoding' && response.headers['content-length']) {
+        delete response.headers[key];
+      }
       res.setHeader(key, response.headers[key]);
     });
   }
