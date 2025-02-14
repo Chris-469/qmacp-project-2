@@ -3,6 +3,7 @@ const path = require('path');
 const { readSysParms, extractParm } = require('./zosmf-mq-services');
 const axios = require('axios');
 const http = require('http');
+const https = require('https');
 
 const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
 

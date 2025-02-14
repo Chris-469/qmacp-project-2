@@ -5,8 +5,14 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const { readSysParms, zosmfRequest } = require('./zosmf-mq-services');
 const app = express();
 const PORT = 3000;
+const https = require('https');
 
 const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
+
+// Create an HTTPS agent with rejectUnauthorized set to false
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false
+});
 
 const options = {
   definition: {
@@ -159,7 +165,8 @@ app.post('/authenticate', async (req, res) => {
     url: zosmfURL + 'services/authenticate',
     headers: {
       'Authorization' : req.headers.authorization
-    }
+    },
+    httpsAgent // Add the HTTPS agent to the request configuration
   };
 
   // Call the authenticate endpoint

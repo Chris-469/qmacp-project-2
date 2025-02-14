@@ -1,8 +1,10 @@
 ﻿const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
+const https = require('https');
 
 const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
+
 
 // Assisted by watsonx Code Assistant
 /**
