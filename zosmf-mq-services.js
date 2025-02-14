@@ -88,7 +88,6 @@ async function readSysParms(ltpaToken, requestBody) {
       statusText: 'Request successful',
       data: returnParameters
     }
-
   } catch(error) {
     console.error('Error occured in readSysParm');
 
