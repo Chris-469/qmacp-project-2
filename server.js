@@ -43,7 +43,37 @@ app.get('/', (req, res)=>{
   res.send("Welcome to root URL of Server");
 });
 
-
+/**
+ * @swagger
+ * /qm-sysparms:
+ *   get:
+ *     summary: Get system parameters for a queue manager
+ *     description: Retrieve system parameters for a specified queue manager.
+ *     parameters:
+ *       - in: body
+ *         name: qmName
+ *         description: The name of the queue manager.
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: cookie
+ *         name: LtpaToken2
+ *         description: LtpaToken2 for authentication.
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: System parameters retrieved successfully
+ *       400:
+ *         description: Mandatory parameter qmName or LtpaToken2 is missing
+ *       401:
+ *         description: Credentials invalid
+ *       500:
+ *         description: Internal server error
+ *       501:
+ *         description: z/OSMF server inactive
+ */
 app.get('/qm-sysparms', async (req, res)=>{
 
   // Check if the request is missing queue manager name
@@ -85,7 +115,8 @@ app.get('/qm-sysparms', async (req, res)=>{
  *     summary: Authenticate user
  *     description: Authenticate with the server using your z/OSMF credentials to obtain an LtpaToken2 to authenticate subsequent requests.
  *     parameters:
- *       - name: Authorization
+ *       - in: header
+ *         name: Authorization
  *         description: 'Basic Authentication header. Basic authentication is a method for HTTP user agents, such as web browsers, to provide a user ID and password when making a request to a protected resource.
  *                       To use Basic authentication, a header field of Authorization: Basic <credentials> will be needed, where credentials are the base64 encoding of the ID and password conjoined by a single colon :.
  *                       For example: Authorization: Basic dGVzdDEyMzQ6dGVzdDEyMzQ='
@@ -107,7 +138,7 @@ app.get('/qm-sysparms', async (req, res)=>{
 app.post('/authenticate', async (req, res) => {
 
   console.log("Authenticte endpoint was called");
-  
+
   // Check that the header field contains an authorization header
   if (!req.headers.authorization) {
     const authHeaderMissing = {
