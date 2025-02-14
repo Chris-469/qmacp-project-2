@@ -5,6 +5,10 @@ const https = require('https');
 
 const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
 
+// Create an HTTPS agent with rejectUnauthorized set to false
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false
+});
 
 // Assisted by watsonx Code Assistant
 /**
@@ -35,7 +39,8 @@ async function readSysParms(ltpaToken, requestBody) {
       url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4ZPRM)',
       headers: {
         'Cookie': 'LtpaToken2=' + ltpaToken
-      }
+      },
+      httpsAgent
     };
 
     // do the request to zosmf
@@ -156,6 +161,7 @@ async function extractParm(jcl, sysParm) {
 async function zosmfRequest(config) {
   try {
     // Do the request to zosmf
+    console.log("In zosmfRequest, running axios request now");
     const response = await axios.request(config);
 
     // Return response andf the cookie

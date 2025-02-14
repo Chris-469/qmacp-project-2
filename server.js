@@ -170,6 +170,7 @@ app.post('/authenticate', async (req, res) => {
   };
 
   // Call the authenticate endpoint
+  console.log("Calling zosmfRequest from /authenticate");
   const response = await zosmfRequest(config);
 
   // Set the headers from the axios response to the express response by iterating over each header
