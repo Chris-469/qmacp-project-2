@@ -179,8 +179,8 @@ app.post('/authenticate', async (req, res) => {
       res.setHeader(key, response.headers[key]);
     });
   }
-
-  // Ensure Transfer-Encoding header is not set
+  
+  // Ensure Transfer-Encoding header is not set since Content-Length is set, to comply with HTTP/1.1 specification
   res.removeHeader('Transfer-Encoding');
 
   // Send the response

@@ -3,13 +3,8 @@ const axios = require('axios');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const express = require('express');
-const https = require('https');
 const app = express();
 const PORT = 3000;
-
-const httpsAgent = new https.Agent({
-  rejectUnauthorized: false
-});
 
 const serverURL = "http://9.20.194.48:3000/"
 const ltpaToken = "LtpaToken2=EOtiPsKmrWQov1Qcx8l9n2igXqcbxHHyjS89nGpV4Rl2XyNWieyeQ8jJw+vZY8QynnBl18pBuS6kIrMiVXEi8jIqfCSBbMFoGmHpYHg1mMKZ4tNIi8hL5VaPk2sPMD0yKCeuLSZ1KVNl99rp1+EMfvNVG8QDrtz5e/iHqxO9mjsVLcIZi1ye82gONC4D5S9lq7zvtX7gXGYghPvyhIe4lvwAmkWc1Pw7iXpwuvM6cVw4INo4OiEdj+kW3nD1hKyBk1q90Ac/tCidit2rIRmONyNYYFXE8weW/3X+W8uYML2pTg7jOZE2igK4GeMNvbmH"
@@ -25,7 +20,6 @@ describe('Test the qmacp server is running',  () => {
       headers: {
         'Cookie': ltpaToken
         },
-      httpsAgent
       }
 
     let response;
@@ -55,7 +49,6 @@ describe('Test the POST /authenticate endpoint ',  () => {
       headers: {
         //'Authorization': 'Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHkz', 
         },
-        httpsAgent
       }
 
     try{
