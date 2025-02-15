@@ -176,15 +176,12 @@ app.post('/authenticate', async (req, res) => {
   // Set the headers from the axios response to the express response by iterating over each header
   if (response.headers != null) {
     Object.keys(response.headers).forEach(key => {
-      // Remove either Content-Length or Transfer-Encoding if both are present
-      if (key.toLowerCase() === 'content-length' && response.headers['transfer-encoding']) {
-        delete response.headers[key];
-      } else if (key.toLowerCase() === 'transfer-encoding' && response.headers['content-length']) {
-        delete response.headers[key];
-      }
       res.setHeader(key, response.headers[key]);
     });
   }
+
+  // Ensure Transfer-Encoding header is not set
+  res.removeHeader('Transfer-Encoding');
 
   // Send the response
   res.status(response.status);

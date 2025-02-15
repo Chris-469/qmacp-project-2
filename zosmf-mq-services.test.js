@@ -1,6 +1,6 @@
 ﻿const fs = require('fs');
 const path = require('path');
-const { readSysParms, extractParm } = require('./zosmf-mq-services');
+const { extractParm } = require('./zosmf-mq-services');
 const axios = require('axios');
 const http = require('http');
 const https = require('https');
