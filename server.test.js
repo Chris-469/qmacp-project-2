@@ -9,35 +9,12 @@ const PORT = 3000;
 const serverURL = "http://9.20.194.48:3000/"
 let ltpaToken2;
 
-describe('Test the qmacp server is running', () => {
-  it('should respond with status 200', async () => {
-
-    let config = {
-      method: 'get',
-      timeout: 10000,
-      maxBodyLength: Infinity,
-      url: serverURL,
-      headers: {},
-      }
-
-    let response;
-
-    try{
-       // execute the request to the server
-       response = await axios.request(config);
-
-    } catch(error) {
-       console.log("An error occurred in testing: " + error?.status || error.message);
-       response = error.message;
-    }
-  
-     // Check the response and return ECONNREFUSED if the server is not running
-     expect(response?.status || response).toBe(200);
-  });
-});
+/**
+ * This test file is for server endpoint testing using real server responses
+ */
 
 describe('UR(1) - The API must allow users to authenticate using their z/OSMF credentials',  () => {
-    
+
   it('UR(1.1) - should respond with status 200 if valid credentials are used', async () => {
 
     let config = {
@@ -117,9 +94,9 @@ describe('UR(1) - The API must allow users to authenticate using their z/OSMF cr
   });
 });
 
-describe('UR(2) - Users should be notified if an error occurs when authenticating with z/OSMF. ', () => {
+describe('Users should be notified if an error occurs when authenticating with z/OSMF. ', () => {
 
-  it('UR(2.1) - should respond with status 401 if invalid credentials are used to authenticate', async () => {
+  it('should respond with status 401 if invalid credentials are used to authenticate', async () => {
 
     let config = {
       method: 'post',
@@ -130,22 +107,65 @@ describe('UR(2) - Users should be notified if an error occurs when authenticatin
         'Authorization': 'Basic SkVGRkVSRTpVcmJhbkMwZDNEM3BsMHkz', // Invalid credentials
         },
       }
-    
+
     let response;
-  
+
     // execute the request to the server
     try{
-       response = await axios.request(config);
-
-       expect(response.status).toBe(401);  // throws an assertion error if it fails
+       response = await axios.request(config); // throws an assertion error for non-200 responses
     } catch(error) {
-      console.log("An error occurred");
-      const response = error?.status || error.message;
-      expect(response).toBe(401); 
+      const response = error?.response.status || error.message;
+      expect(response).toBe(401);
     }
   });
 
-  it('UR(2.2) - should respond with status 400 no credentials are provided', async () => {
+  it('UR(2.1) - should respond with an informative message if invalid credentials are used to authenticate', async () => {
+
+    let config = {
+      method: 'post',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "authenticate",
+      headers: {
+        'Authorization': 'Basic SkVGRkVSRTpVcmJhbkMwZDNEM3BsMHkz', // Invalid credentials
+        },
+      }
+
+    let response;
+
+    // execute the request to the server
+    try{
+       response = await axios.request(config); // throws an assertion error for non-200 responses
+    } catch(error) {
+      const response = error?.response.data.statusText || error.message;
+      expect(response).toBe("Unauthorized");
+    }
+  });
+
+  it('UR(2.1) - should not respond with an LtpaToken2 cookie if invalid credentials are used to authenticate', async () => {
+
+    let config = {
+      method: 'post',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "authenticate",
+      headers: {
+        'Authorization': 'Basic SkVGRkVSRTpVcmJhbkMwZDNEM3BsMHkz', // Invalid credentials
+        },
+      }
+
+    let response;
+
+    // execute the request to the server
+    try{
+       response = await axios.request(config); // throws an assertion error for non-200 responses
+    } catch(error) {
+      const response = error?.response.headers || error.message;
+      expect(response["set-cookie"]).not.toBeDefined();
+    }
+  });
+
+  it('UR(2.2) - should respond with status 400 if no cookie & no credentials are provided', async () => {
 
     let config = {
       method: 'post',
@@ -154,15 +174,51 @@ describe('UR(2) - Users should be notified if an error occurs when authenticatin
       url: serverURL + "authenticate",
       headers: {},
       }
-  
+
     // execute the request to the server
     try{
        const response = await axios.request(config);
-       expect(response.status).toBe(400); 
     } catch(error) {
-       console.log("An error occurred");
-       const response = error?.status || error.message;
-       expect(response).toBe(400); 
+       const response = error?.response.status || error.message;
+       expect(response).toBe(400);
+    }
+  });
+
+  it('UR(2.2) - should respond with an informative message if no cookie & no credentials are provided', async () => {
+
+    let config = {
+      method: 'post',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "authenticate",
+      headers: {},
+      }
+
+    // execute the request to the server
+    try{
+       const response = await axios.request(config);
+    } catch(error) {
+       const response = error?.response.data.statusText || error.message;
+       expect(response).toBe("Authorization header missing");
+    }
+  });
+
+  it('UR(2.2) - should respond without a cookie, if no cookie & no credentials are provided', async () => {
+
+    let config = {
+      method: 'post',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "authenticate",
+      headers: {},
+      }
+
+    // execute the request to the server
+    try{
+       const response = await axios.request(config);
+    } catch(error) {
+       const response = error?.response.headers || error.message;
+       expect(response["set-cookie"]).not.toBeDefined();
     }
   });
 });

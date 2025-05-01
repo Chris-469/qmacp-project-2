@@ -1,0 +1,38 @@
+{
+  "message": "getaddrinfo ENOTFOUND winmvs3c.hursley.ibm.com",
+  "name": "Error",
+  "stack": "Error: getaddrinfo ENOTFOUND winmvs3c.hursley.ibm.com\n    at AxiosError.from (/Users/chriscocklin/Library/CloudStorage/OneDrive-IBM/Documents/OU Degree Work/TMXY475 - Computing and IT Project/Project Work/qm-automated-configuration-project/node_modules/axios/dist/node/axios.cjs:877:14)\n    at RedirectableRequest.handleRequestError (/Users/chriscocklin/Library/CloudStorage/OneDrive-IBM/Documents/OU Degree Work/TMXY475 - Computing and IT Project/Project Work/qm-automated-configuration-project/node_modules/axios/dist/node/axios.cjs:3163:25)\n    at RedirectableRequest.emit (node:events:525:35)\n    at eventHandlers.<computed> (/Users/chriscocklin/Library/CloudStorage/OneDrive-IBM/Documents/OU Degree Work/TMXY475 - Computing and IT Project/Project Work/qm-automated-configuration-project/node_modules/follow-redirects/index.js:49:24)\n    at ClientRequest.emit (node:events:513:28)\n    at emitErrorEvent (node:_http_client:104:11)\n    at TLSSocket.socketErrorListener (node:_http_client:518:5)\n    at TLSSocket.emit (node:events:513:28)\n    at emitErrorNT (node:internal/streams/destroy:170:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:129:3)\n    at Axios.request (/Users/chriscocklin/Library/CloudStorage/OneDrive-IBM/Documents/OU Degree Work/TMXY475 - Computing and IT Project/Project Work/qm-automated-configuration-project/node_modules/axios/dist/node/axios.cjs:4252:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async utilityFunction (/Users/chriscocklin/Library/CloudStorage/OneDrive-IBM/Documents/OU Degree Work/TMXY475 - Computing and IT Project/Project Work/qm-automated-configuration-project/create-mock-responses.js:27:18)\n    at async /Users/chriscocklin/Library/CloudStorage/OneDrive-IBM/Documents/OU Degree Work/TMXY475 - Computing and IT Project/Project Work/qm-automated-configuration-project/create-mock-responses.js:68:3",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": [
+      "xhr",
+      "http",
+      "fetch"
+    ],
+    "transformRequest": [
+      null
+    ],
+    "transformResponse": [
+      null
+    ],
+    "timeout": 10000,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": null,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Cookie": "LtpaToken2=LcBUxQyEaxEuSSP/vN+gKVIQPwp00XjKFkc+8lYtxRuJk/pjhnXpIkOQCjkb3pfZbOalv7qWfk95R/VjHEX9QE1+pHZzE6ZucvkfI56XdwHy21REzDyll6DRQx916GRxNkW12L2ohyJ2c/xxG7MRzYUpPyc1AfV0RYHGl6x0hVak27UsA8Xs8YnX5ENvGMHA6hQJbA78jE+6dmmIz7z0Xheml7rnOcYfp87/qPh1NKrIdJVrtRplHvCElWvU2uBs58YLZmmCuBOqtHxOYWIaGEae/QX8eBrtSHtPE2q53sV4fc4h9N7oBHYU8czei0X9",
+      "User-Agent": "axios/1.7.9",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "get",
+    "url": "https://winmvs3c.hursley.ibm.com:32070/zosmf/restfiles/ds/VICY.MQ1A.V9XX.SCSQPROC(CSQ4ZPRM)"
+  },
+  "code": "ENOTFOUND"
+}

@@ -28,7 +28,7 @@ async function readSysParms(ltpaToken, requestBody) {
   if(!requestBody.sysParms) {
     requestBody.sysParms = 'ALL';
   }
-  
+
   // get the CSQ4ZPRM dataset for this queue manager
   try {
     // Build the request config
@@ -53,9 +53,9 @@ async function readSysParms(ltpaToken, requestBody) {
 
     // Parse the system parameters from the csq4zprm file
     if(requestBody.sysParms == 'ALL') {
-      
+
       console.log("Reading all parameters from json file");
-      
+
       // Read the contents of system-parameters.json into a variable
       const systemParametersPath = path.join(__dirname, 'system-parameters.json');
       const systemParametersContent = fs.readFileSync(systemParametersPath, 'utf8');
@@ -65,12 +65,12 @@ async function readSysParms(ltpaToken, requestBody) {
       Object.keys(allSystemParameters).forEach(async key => {
         // Get the value of the parameter
         const value = await extractParm(zosmfResponse.data, allSystemParameters[key]);
-        
+
         // Add the parameter to the return value
         returnParameters[allSystemParameters[key]] = value;
       });
-      
-    } 
+
+    }
     else
     {
       // Check if the last character of sysParms is a comma and remove it if necessary
@@ -108,7 +108,6 @@ async function readSysParms(ltpaToken, requestBody) {
   }
 }
 
-// Assisted by watsonx Code Assistant
 /**
  * Extracts a single parameter from a CSQ4ZPRM formatted JCL job.
  * @param {string} jcl - The JCL string to search.

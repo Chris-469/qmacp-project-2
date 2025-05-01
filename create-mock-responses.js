@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
-const fileName = 'zosmf-server-inactive.json';
+const fileName = 'zosmf-server-inaccessible.json';
 
 async function utilityFunction() {
 
@@ -27,12 +27,7 @@ async function utilityFunction() {
       response = await axios.request(config);
     }
     catch(e) {
-      if(e.response && e.response.status == 401) {
-        console.log('Received a 401 response from zosmf');
-        response = e.response;
-      } else {
-        throw e;
-      }
+      response = e.response;
     }
     
     // Write the response to a file
@@ -41,6 +36,7 @@ async function utilityFunction() {
 
     // Build the file contents object using the fields of the response we care about object.
     // Note - including request in the mock response introduces circular error messages
+
     const fileContents = {
       status: response.status,
       statusText: response.statusText || "",
