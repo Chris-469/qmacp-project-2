@@ -180,6 +180,8 @@ app.get('/qm-sysparms', async (req, res)=>{
     });
   }
 
+  // TODO - Check if the request has a sysParms field, otherwise dont continue
+
   // Pass the relevant fields to the readSysParm function and wait for the response
   const response = await readSysParms(req.cookies.LtpaToken2, req.body);
 

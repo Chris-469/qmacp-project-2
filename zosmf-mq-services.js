@@ -19,7 +19,7 @@ const httpsAgent = new https.Agent({
  * @returns {Promise<string>} The value of the parameter.
  */
 async function readSysParms(ltpaToken, requestBody) {
-
+  console.log("readSysParms called");
   // Extract the queue manager name from the request body
   const qmName = requestBody.qmName;
   let returnParameters = {};
@@ -118,7 +118,6 @@ async function readSysParms(ltpaToken, requestBody) {
 async function editSysParms(ltpaToken, requestBody) {
 
   console.log("editSysParms called");
-  console.log(ltpaToken);
 
   // Extract the queue manager name from the request body
   const qmName = requestBody.qmName;
@@ -146,20 +145,14 @@ async function editSysParms(ltpaToken, requestBody) {
     }
 
     // Update the JCL with the new parameter value
-    await editJCL(zosmfResponse.data, requestBody.sysParm);
+    let updatedJCL = await editJCL(zosmfResponse.data, requestBody.sysParms);
 
-    // Check its the correct line and not a comment or something
-
-    // Update the value part of that line to our new value
-
-    // Execute zosmf call to update that JCL with our new JCL
-
-    // Return all other axios errors and use optional chaining and default values to catch misc errors
+    // Return the updated JCL
+    zosmfResponse.data = updatedJCL;
     return zosmfResponse;
 
-
   } catch(error) {
-    console.error('Error occured in readSysParm');
+    console.error('Unexpected error occured in editSysParms');
 
     // Return all other axios errors and use optional chaining and default values to catch misc errors
     return {
@@ -176,33 +169,45 @@ async function editSysParms(ltpaToken, requestBody) {
  * @param {string} sysParm - The parameter to update.
  * @returns {string} The updated JCL string.
  */
-async function editJCL(jcl, sysParmStructure) {
+async function editJCL(jcl, sysParms) {
   console.log("editJCL called"); 
 
   // Extract the key and value
-  const [key, value] = Object.entries(sysParmStructure)[0];
+  const [key, value] = Object.entries(sysParms)[0];
   const paramName = key;
   const paramValue = value;
 
   // Split the jcl into lines
-  const lines = jcl.split('\n');
+  let lines = jcl.split('\n');
+  console.log("editJCL: Lines of JCL split");
 
   // Iterate over each line
-  for (let line of lines) {
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i]; // Access the current line
+
     // Check if the line contains the parameter
-    if (line.includes(sysParm)) {
+    if (line.includes(paramName)) {
+
+      // Extract the start position of parameter
+      const paramPosition = line.indexOf(paramName);
 
       // Check that this line is not a comment, jcl statement or inside another parameter word
       if(line.substring(0,2) == "//" ||
-         line.substring(paramPosition + sysParm.length, paramPosition + sysParm.length + 1) != "=" ||
+         line.substring(paramPosition + paramName.length, paramPosition + paramName.length + 1) != "=" ||
          line.substring(paramPosition - 1, paramPosition) != " ") {
         continue;
       }
 
       // Update the line with the new parameter value
       console.log("Original line: " + line);
-      let updatedLine = updateSysParmValue(line, paramName, paramValue);
+      let updatedLine = await updateSysParmValue(line, paramName, paramValue);
       console.log("Updated line: " + updatedLine);
+
+      // Push the updated line to the lines array
+      lines[i] = updatedLine;
+
+      // Join the lines back into a single string
+      return lines.join('\n')
     }
   }
   return null; // Return null if the parameter is not found
@@ -236,11 +241,8 @@ async function updateSysParmValue(jclLine, sysParm, updateValue) {
         updateValue + 
         line.substring(endPos);
 
-      // Update the line in the array
-      lines[i] = updatedLine;
-
-      // Join the lines back into a single string
-      return lines.join('\n');
+      // Join the updated line
+      return updatedLine;
     }
 
     // Return the original line if the parameter is not found
