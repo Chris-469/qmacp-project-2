@@ -117,6 +117,9 @@ async function readSysParms(ltpaToken, requestBody) {
  */
 async function editSysParms(ltpaToken, requestBody) {
 
+  console.log("editSysParms called");
+  console.log(ltpaToken);
+
   // Extract the queue manager name from the request body
   const qmName = requestBody.qmName;
 
@@ -164,7 +167,6 @@ async function editSysParms(ltpaToken, requestBody) {
       statusText: error.response?.statusText || 'Internal Server Error',
       data: error.response?.data || error.message
     };
-
   }
 }
 
