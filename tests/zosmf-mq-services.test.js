@@ -652,6 +652,20 @@ describe('The editJcl parameter should return a correctly edited CSQ4ZPRM', () =
     expect(value).toBe(testValue);
   });
 
+  test('should always result in a line less than 72 characters long', async () => {
+    let testParm = 'STATIME';
+    let testValue = '60000000';
+
+    let testSysParms = {
+      [testParm]: testValue,
+    };
+
+    const updatedJCL = await editJCL(jclContent, testSysParms);
+    const line = extractLine(updatedJCL, testParm);
+
+    expect(line.length).toBeLessThan(73);
+  });
+
 });
 
 // Returns the line containing the parameter name from the JCL

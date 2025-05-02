@@ -248,10 +248,15 @@ async function editJclLine(jclLine, sysParm, updateValue) {
       }
 
       // Replace the old value with the new value
-      const updatedLine = 
+      let updatedLine = 
         line.substring(0, paramPosition + sysParm.length + 1) + 
         updateValue + 
         line.substring(endPos);
+
+      // Check for lines greater than 72 characters
+      if (updatedLine.length > 72) {
+        updatedLine = updatedLine.substring(0, 68) + "   X";
+      }
 
       // Join the updated line
       return updatedLine;

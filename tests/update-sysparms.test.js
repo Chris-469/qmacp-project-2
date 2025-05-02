@@ -25,7 +25,6 @@ let validCredentialsConfig = {
 /**
  * This file will test the PUT /-qm-systems endpoint which should update system parameters on a given queue manager
 */
-
 describe('UR(6) - Users should be able to update system parameters using the API',  () => {
 
   it('UR(6.1) - should respond with status 401 if invalid credentials are used to authenticate', async () => {
