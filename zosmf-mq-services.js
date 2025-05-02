@@ -143,7 +143,7 @@ async function editSysParms(ltpaToken, requestBody) {
     }
 
     // Update the JCL with the new parameter value
-    editJCL(zosmfResponse.data, requestBody.sysParm);
+    await editJCL(zosmfResponse.data, requestBody.sysParm);
 
     // Check its the correct line and not a comment or something
 
@@ -174,7 +174,7 @@ async function editSysParms(ltpaToken, requestBody) {
  * @param {string} sysParm - The parameter to update.
  * @returns {string} The updated JCL string.
  */
-function editJCL(jcl, sysParmStructure) {
+async function editJCL(jcl, sysParmStructure) {
   console.log("editJCL called"); 
 
   // Extract the key and value
@@ -213,7 +213,7 @@ function editJCL(jcl, sysParmStructure) {
  * @param {string} updateValue - The new value for the system parameter.
  * @returns {string} The updated JCL string.
  */
-function updateSysParmValue(jclLine, sysParm, updateValue) {
+async function updateSysParmValue(jclLine, sysParm, updateValue) {
     console.log("updateSysParmValue called"); 
     const line = jclLine;
 
