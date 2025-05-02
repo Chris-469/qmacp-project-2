@@ -182,42 +182,39 @@ async function editSysParms(ltpaToken, requestBody) {
  */
 async function editJCL(jcl, sysParms) {
 
-  // Extract the key and value
-  const [key, value] = Object.entries(sysParms)[0];
-  const paramName = key;
-  const paramValue = value;
-
   // Split the jcl into lines
   let lines = jcl.split('\n');
 
-  // Iterate over each line
-  for (let i = 0; i < lines.length; i++) {
-    let line = lines[i]; // Access the current line
+  // Iterate over each key-value pair in sysParms
+  for (const [paramName, paramValue] of Object.entries(sysParms)) {
 
-    // Check if the line contains the parameter
-    if (line.includes(paramName)) {
+    // Iterate over each line
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i]; // Access the current line
 
-      // Extract the start position of parameter
-      const paramPosition = line.indexOf(paramName);
+      // Check if the line contains the parameter
+      if (line.includes(paramName)) {
 
-      // Check that this line is not a comment, jcl statement or inside another parameter word
-      if(line.substring(0,2) == "//" ||
-         line.substring(paramPosition + paramName.length, paramPosition + paramName.length + 1) != "=" ||
-         line.substring(paramPosition - 1, paramPosition) != " ") {
-        continue;
+        // Extract the start position of parameter
+        const paramPosition = line.indexOf(paramName);
+
+        // Check that this line is not a comment, jcl statement or inside another parameter word
+        if(line.substring(0,2) == "//" ||
+          line.substring(paramPosition + paramName.length, paramPosition + paramName.length + 1) != "=" ||
+          line.substring(paramPosition - 1, paramPosition) != " ") {
+          continue;
+        }
+
+        // Update the line with the new parameter value
+        let updatedLine = await editJclLine(line, paramName, paramValue);
+
+        // Push the updated line to the lines array
+        lines[i] = updatedLine;
       }
-
-      // Update the line with the new parameter value
-      let updatedLine = await editJclLine(line, paramName, paramValue);
-
-      // Push the updated line to the lines array
-      lines[i] = updatedLine;
-
-      // Join the lines back into a single string
-      return lines.join('\n')
     }
   }
-  return null; // Return null if the parameter is not found
+  // Join the lines back into a single string
+  return lines.join('\n')
 }
 
 /**
@@ -254,8 +251,13 @@ async function editJclLine(jclLine, sysParm, updateValue) {
         line.substring(endPos);
 
       // Check for lines greater than 72 characters
-      if (updatedLine.length > 72) {
-        updatedLine = updatedLine.substring(0, 68) + "   X";
+      if (updatedLine.length != 72) {
+        if (updatedLine.length > 72) {
+          updatedLine = updatedLine.substring(0, 68) + "   X";
+        }
+        else {
+          updatedLine = updatedLine.substring(0, 65) + "      X";
+        } 
       }
 
       // Join the updated line
