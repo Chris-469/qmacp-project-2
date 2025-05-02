@@ -252,12 +252,18 @@ app.put('/qm-sysparms', async (req, res)=>{
   const response = await editSysParms(req.cookies.LtpaToken2, req.body);
 
   // Send the response
-  res.status(response.status);
-  res.send({
-    'status': response.status,
-    'statusText': response.statusText,
-    'data': response.data
-  });
+  if (response.status == 204) {
+    res.status(200).send({
+      status: 200,
+      statusText: "JCL updated successfully",
+    });
+  } else {
+    res.send({
+      'status': response.status,
+      'statusText': "JCL updated successfully",
+      'data': response.data
+    });
+  }
 });
 
 app.listen(PORT, (error) =>{

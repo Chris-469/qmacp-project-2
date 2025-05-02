@@ -19,7 +19,6 @@ const httpsAgent = new https.Agent({
  * @returns {Promise<string>} The value of the parameter.
  */
 async function readSysParms(ltpaToken, requestBody) {
-  console.log("readSysParms called");
   // Extract the queue manager name from the request body
   const qmName = requestBody.qmName;
   let returnParameters = {};
@@ -109,15 +108,13 @@ async function readSysParms(ltpaToken, requestBody) {
 }
 
 /**
- * Read one or more system parameters from CSQ4ZPRM.
+ * Edit a parameter in CSQ4ZPRM.
  * @param {string} sysParm - The system parameter to edited and its new value.
  * @param {string} qmName - The queue manager name.
  * @param {string} ltpaToken - The LTPA token.
  * @returns {Promise<string>} The value of the parameter.
  */
 async function editSysParms(ltpaToken, requestBody) {
-
-  console.log("editSysParms called");
 
   // Extract the queue manager name from the request body
   const qmName = requestBody.qmName;
@@ -147,8 +144,22 @@ async function editSysParms(ltpaToken, requestBody) {
     // Update the JCL with the new parameter value
     let updatedJCL = await editJCL(zosmfResponse.data, requestBody.sysParms);
 
-    // Return the updated JCL
-    zosmfResponse.data = updatedJCL;
+    // Execute zOSMF request to update the dataset TODO update CSQ4RPRM to correct name when testing has finshed
+    config = {
+      method: 'put',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4RPRM)',
+      headers: {
+        'Cookie': 'LtpaToken2=' + ltpaToken
+      },
+      httpsAgent,
+      data: updatedJCL
+    };
+
+    zosmfResponse = await zosmfRequest(config);
+
+    // Return respone after updating the dataset
     return zosmfResponse;
 
   } catch(error) {
@@ -170,7 +181,6 @@ async function editSysParms(ltpaToken, requestBody) {
  * @returns {string} The updated JCL string.
  */
 async function editJCL(jcl, sysParms) {
-  console.log("editJCL called"); 
 
   // Extract the key and value
   const [key, value] = Object.entries(sysParms)[0];
@@ -179,7 +189,6 @@ async function editJCL(jcl, sysParms) {
 
   // Split the jcl into lines
   let lines = jcl.split('\n');
-  console.log("editJCL: Lines of JCL split");
 
   // Iterate over each line
   for (let i = 0; i < lines.length; i++) {
@@ -199,9 +208,7 @@ async function editJCL(jcl, sysParms) {
       }
 
       // Update the line with the new parameter value
-      console.log("Original line: " + line);
-      let updatedLine = await updateSysParmValue(line, paramName, paramValue);
-      console.log("Updated line: " + updatedLine);
+      let updatedLine = await editJclLine(line, paramName, paramValue);
 
       // Push the updated line to the lines array
       lines[i] = updatedLine;
@@ -220,8 +227,7 @@ async function editJCL(jcl, sysParms) {
  * @param {string} updateValue - The new value for the system parameter.
  * @returns {string} The updated JCL string.
  */
-async function updateSysParmValue(jclLine, sysParm, updateValue) {
-    console.log("updateSysParmValue called"); 
+async function editJclLine(jclLine, sysParm, updateValue) {
     const line = jclLine;
 
     // Check if the line contains the parameter
@@ -229,8 +235,14 @@ async function updateSysParmValue(jclLine, sysParm, updateValue) {
       // Extract the start position of the parameter
       const paramPosition = line.indexOf(sysParm);
 
-      // Find the position of the value using the first space or comma
+      // Find the position of the value using the first space or commas
       let endPos = line.indexOf(" ", paramPosition + sysParm.length);
+
+      // Account for commas at the end of lines
+      if (line.substring(endPos - 1, endPos) == ",") {
+        endPos -= 1;
+      }
+
       if (endPos === -1 || line[endPos - 1] === ",") {
         endPos = line.indexOf(",", paramPosition + sysParm.length);
       }
@@ -300,7 +312,6 @@ async function extractParm(jcl, sysParm) {
 async function zosmfRequest(config) {
   try {
     // Do the request to zosmf
-    console.log("In zosmfRequest, running axios request now");
     const response = await axios.request(config);
 
     // Return response andf the cookie
@@ -308,7 +319,6 @@ async function zosmfRequest(config) {
 
   } catch(error) {
       // Handle axios errors
-      console.log("An axios error occurred in zosmfRequest");
 
       // Check for timeout error
       if(error.code == 'ECONNABORTED') {
@@ -337,5 +347,7 @@ module.exports = {
   readSysParms,
   extractParm,
   zosmfRequest, 
-  editSysParms
+  editSysParms,
+  editJclLine,
+  editJCL
 };
