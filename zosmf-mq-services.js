@@ -142,8 +142,8 @@ async function editSysParms(ltpaToken, requestBody) {
       return zosmfResponse;
     }
 
-    // Find the line in zosmfResponse.data or .body? which has the parameter value
-    console.log(zosmfResponse.data);
+    // Update the JCL with the new parameter value
+    editJCL(zosmfResponse.data, requestBody.sysParm);
 
     // Check its the correct line and not a comment or something
 
@@ -152,7 +152,7 @@ async function editSysParms(ltpaToken, requestBody) {
     // Execute zosmf call to update that JCL with our new JCL
 
     // Return all other axios errors and use optional chaining and default values to catch misc errors
-    return;
+    return zosmfResponse;
 
 
   } catch(error) {
@@ -166,6 +166,83 @@ async function editSysParms(ltpaToken, requestBody) {
     };
 
   }
+}
+
+/**
+ * Update the given JCL with the new parameter value.
+ * @param {string} jcl - The JCL string to update.
+ * @param {string} sysParm - The parameter to update.
+ * @returns {string} The updated JCL string.
+ */
+function editJCL(jcl, sysParmStructure) {
+  console.log("editJCL called"); 
+
+  // Extract the key and value
+  const [key, value] = Object.entries(sysParmStructure)[0];
+  const paramName = key;
+  const paramValue = value;
+
+  // Split the jcl into lines
+  const lines = jcl.split('\n');
+
+  // Iterate over each line
+  for (let line of lines) {
+    // Check if the line contains the parameter
+    if (line.includes(sysParm)) {
+
+      // Check that this line is not a comment, jcl statement or inside another parameter word
+      if(line.substring(0,2) == "//" ||
+         line.substring(paramPosition + sysParm.length, paramPosition + sysParm.length + 1) != "=" ||
+         line.substring(paramPosition - 1, paramPosition) != " ") {
+        continue;
+      }
+
+      // Update the line with the new parameter value
+      console.log("Original line: " + line);
+      let updatedLine = updateSysParmValue(line, paramName, paramValue);
+      console.log("Updated line: " + updatedLine);
+    }
+  }
+  return null; // Return null if the parameter is not found
+}
+
+/**
+ * Update the value of a system parameter in a JCL string.
+ * @param {string} jcl - The JCL string to update.
+ * @param {string} sysParm - The system parameter to update.
+ * @param {string} updateValue - The new value for the system parameter.
+ * @returns {string} The updated JCL string.
+ */
+function updateSysParmValue(jclLine, sysParm, updateValue) {
+    console.log("updateSysParmValue called"); 
+    const line = jclLine;
+
+    // Check if the line contains the parameter
+    if (line.includes(sysParm)) {
+      // Extract the start position of the parameter
+      const paramPosition = line.indexOf(sysParm);
+
+      // Find the position of the value using the first space or comma
+      let endPos = line.indexOf(" ", paramPosition + sysParm.length);
+      if (endPos === -1 || line[endPos - 1] === ",") {
+        endPos = line.indexOf(",", paramPosition + sysParm.length);
+      }
+
+      // Replace the old value with the new value
+      const updatedLine = 
+        line.substring(0, paramPosition + sysParm.length + 1) + 
+        updateValue + 
+        line.substring(endPos);
+
+      // Update the line in the array
+      lines[i] = updatedLine;
+
+      // Join the lines back into a single string
+      return lines.join('\n');
+    }
+
+    // Return the original line if the parameter is not found
+    return jclLine; 
 }
 
 /**
