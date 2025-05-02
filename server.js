@@ -2,7 +2,7 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-const { readSysParms, zosmfRequest } = require('./zosmf-mq-services');
+const { readSysParms, zosmfRequest, editSysParms } = require('./zosmf-mq-services');
 const app = express();
 const PORT = 3000;
 const https = require('https');
@@ -48,72 +48,6 @@ app.get('/', (req, res)=>{
   console.log("Root URL was accessed");
   res.status(200);
   res.send("Welcome to root URL of Server");
-});
-
-/**
- * @swagger
- * /qm-sysparms:
- *   get:
- *     summary: Get system parameters for a queue manager
- *     description: Retrieve system parameters for a specified queue manager.
- *     parameters:
- *       - in: body
- *         name: qmName
- *         description: The name of the queue manager.
- *         required: true
- *         schema:
- *           type: string
- *       - in: cookie
- *         name: LtpaToken2
- *         description: LtpaToken2 for authentication.
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: System parameters retrieved successfully
- *       400:
- *         description: Mandatory parameter qmName or LtpaToken2 is missing
- *       401:
- *         description: Credentials invalid
- *       500:
- *         description: Internal server error
- *       501:
- *         description: z/OSMF server inactive
- */
-app.get('/qm-sysparms', async (req, res)=>{
-  console.log("GET /qm-sysparms endpoint was called");
-
-  // Check if the request is missing queue manager name
-  if (!req.body.qmName) {
-    // Return 400 since queue manager name is missing
-    return res.status(400).send({
-      'status': 400,
-      'statusText': 'Mandatory parameter qmName is missing',
-      'data': 'The request failed because the mandatory qmName field was missing from the body. Please try again and provide a valid qmName field'
-    });
-  }
-
-  // Check if the request is missing an LtpaToken2
-  if (!req.cookies.LtpaToken2) {
-    // Return 400 since queue manager name is missing
-    return res.status(400).send({
-      'status': 400,
-      'statusText': 'Mandatory request header LtpaToken2 is missing',
-      'data': 'The request failed because request header did not include an LtpaToken2 token. Please try again and provide a valid LtpaToken2. If you do not have an LtpaToken2 yet, us the /authenticate endpoint to get one'
-    });
-  }
-
-  // Pass the relevant fields to the readSysParm function and wait for the response
-  const response = await readSysParms(req.cookies.LtpaToken2, req.body);
-
-  // Send the response
-  res.status(response.status);
-  res.send({
-    'status': response.status,
-    'statusText': response.statusText,
-    'data': response.data
-  });
 });
 
 /**
@@ -192,6 +126,138 @@ app.post('/authenticate', async (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /qm-sysparms:
+ *   get:
+ *     summary: Get system parameters for a queue manager
+ *     description: Retrieve system parameters for a specified queue manager.
+ *     parameters:
+ *       - in: body
+ *         name: qmName
+ *         description: The name of the queue manager.
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: cookie
+ *         name: LtpaToken2
+ *         description: LtpaToken2 for authentication.
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: System parameters retrieved successfully
+ *       400:
+ *         description: Mandatory parameter qmName or LtpaToken2 is missing
+ *       401:
+ *         description: Credentials invalid
+ *       500:
+ *         description: Internal server error
+ *       501:
+ *         description: z/OSMF server inactive
+ */
+app.get('/qm-sysparms', async (req, res)=>{
+  console.log("GET /qm-sysparms endpoint was called");
+
+  // Check if the request is missing queue manager name
+  if (!req.body.qmName) {
+    // Return 400 since queue manager name is missing
+    return res.status(400).send({
+      'status': 400,
+      'statusText': 'Mandatory parameter qmName is missing',
+      'data': 'The request failed because the mandatory qmName field was missing from the body. Please try again and provide a valid qmName field'
+    });
+  }
+
+  // Check if the request is missing an LtpaToken2
+  if (!req.cookies.LtpaToken2) {
+    // Return 400 since queue manager name is missing
+    return res.status(400).send({
+      'status': 400,
+      'statusText': 'Mandatory request header LtpaToken2 is missing',
+      'data': 'The request failed because request header did not include an LtpaToken2 token. Please try again and provide a valid LtpaToken2. If you do not have an LtpaToken2 yet, us the /authenticate endpoint to get one'
+    });
+  }
+
+  // Pass the relevant fields to the readSysParm function and wait for the response
+  const response = await readSysParms(req.cookies.LtpaToken2, req.body);
+
+  // Send the response
+  res.status(response.status);
+  res.send({
+    'status': response.status,
+    'statusText': response.statusText,
+    'data': response.data
+  });
+});
+
+/**
+ * @swagger
+ * /qm-sysparms:
+ *   put:
+ *     summary: Edit system parameters for a queue manager
+ *     description: Edit any system parameters for a specified queue manager.
+ *     parameters:
+ *       - in: body
+ *         name: qmName
+ *         description: The name of the queue manager.
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: cookie
+ *         name: LtpaToken2
+ *         description: LtpaToken2 for authentication.
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: System parameters updated successfully
+ *       400:
+ *         description: Mandatory parameter qmName or LtpaToken2 is missing
+ *       401:
+ *         description: Credentials invalid
+ *       500:
+ *         description: Internal server error
+ *       501:
+ *         description: z/OSMF server inactive
+ */
+app.put('/qm-sysparms', async (req, res)=>{
+  console.log("PUT /qm-sysparms endpoint was called");
+
+  // Check if the request is missing queue manager name
+  if (!req.body.qmName) {
+    // Return 400 since queue manager name is missing
+    return res.status(400).send({
+      'status': 400,
+      'statusText': 'Mandatory parameter qmName is missing',
+      'data': 'The request failed because the mandatory qmName field was missing from the body. Please try again and provide a valid qmName field'
+    });
+  }
+
+  // Check if the request is missing an LtpaToken2
+  if (!req.cookies.LtpaToken2) {
+    // Return 400 since queue manager name is missing
+    return res.status(400).send({
+      'status': 400,
+      'statusText': 'Mandatory request header LtpaToken2 is missing',
+      'data': 'The request failed because request header did not include an LtpaToken2 token. Please try again and provide a valid LtpaToken2. If you do not have an LtpaToken2 yet, us the /authenticate endpoint to get one'
+    });
+  }
+
+  // Pass the relevant fields to the editSysParms function and wait for the response
+  const response = await editSysParms(req.cookies.LtpaToken2, req.body);
+
+  // Send the response
+  res.status(response.status);
+  res.send({
+    'status': response.status,
+    'statusText': response.statusText,
+    'data': response.data
+  });
+});
+
 app.listen(PORT, (error) =>{
     if(!error)
         console.log("Server running + available at http://localhost:3000 ")
@@ -199,3 +265,5 @@ app.listen(PORT, (error) =>{
         console.log("Error occurred, server can't start", error);
     }
 );
+
+

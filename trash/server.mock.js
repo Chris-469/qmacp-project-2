@@ -38,7 +38,7 @@ describe('UR(2) - Users should be notified if server errors occur when testing z
     try{
       response = await axios.request(config); // throws an assertion error for non-200 responses
     } catch(error) {
-      const response = error?.response || error.code;
+      response = error?.response || error.code;
     }
 
     expect(response).toBe(401);

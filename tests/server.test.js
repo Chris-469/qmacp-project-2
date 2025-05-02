@@ -23,7 +23,7 @@ describe('UR(1) - The API must allow users to authenticate using their z/OSMF cr
       maxBodyLength: Infinity,
       url: serverURL + "authenticate",
       headers: {
-        'Authorization': 'Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHkz', // Valid Credentials
+        'Authorization': 'Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0', // Valid Credentials
         },
       }
 
@@ -51,7 +51,7 @@ describe('UR(1) - The API must allow users to authenticate using their z/OSMF cr
       maxBodyLength: Infinity,
       url: serverURL + "authenticate",
       headers: {
-        'Authorization': 'Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHkz', // Valid Credentials
+        'Authorization': 'Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0', // Valid Credentials
         },
       }
 
@@ -76,7 +76,7 @@ describe('UR(1) - The API must allow users to authenticate using their z/OSMF cr
       maxBodyLength: Infinity,
       url: serverURL + "authenticate",
       headers: {
-        'Authorization': 'Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHkz', // Valid Credentials
+        'Authorization': 'Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0', // Valid Credentials
         },
       }
 
@@ -94,9 +94,9 @@ describe('UR(1) - The API must allow users to authenticate using their z/OSMF cr
   });
 });
 
-describe('Users should be notified if an error occurs when authenticating with z/OSMF. ', () => {
+describe('UR(2) - Users should be notified if an error occurs when authenticating with z/OSMF. ', () => {
 
-  it('should respond with status 401 if invalid credentials are used to authenticate', async () => {
+  it('UR(2.1) - should respond with status 401 if invalid credentials are used to authenticate', async () => {
 
     let config = {
       method: 'post',
@@ -184,7 +184,7 @@ describe('Users should be notified if an error occurs when authenticating with z
     }
   });
 
-  it('UR(2.2) - should respond with an informative message if no cookie & no credentials are provided', async () => {
+  it('UR(2.4) - should respond with an informative message if no cookie & no credentials are provided', async () => {
 
     let config = {
       method: 'post',
@@ -203,7 +203,7 @@ describe('Users should be notified if an error occurs when authenticating with z
     }
   });
 
-  it('UR(2.2) - should respond without a cookie, if no cookie & no credentials are provided', async () => {
+  it('UR(2.4) - should respond without a cookie, if no cookie & no credentials are provided', async () => {
 
     let config = {
       method: 'post',
@@ -219,6 +219,37 @@ describe('Users should be notified if an error occurs when authenticating with z
     } catch(error) {
        const response = error?.response.headers || error.message;
        expect(response["set-cookie"]).not.toBeDefined();
+    }
+  });
+});
+
+describe('UR(6) - Users should be able to update system parameters using the API',  () => {
+
+  it('UR(1.1) - should respond with status 200 if valid credentials are used', async () => {
+
+    let config = {
+      method: 'post',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "authenticate",
+      headers: {
+        'Authorization': 'Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0', // Valid Credentials
+        },
+      }
+
+    try{
+       // execute the request to the server
+       const response = await axios.request(config);
+
+       // set the ltpatoken2 test variable for subsequent tests
+       ltpaToken2 = response.headers['set-cookie'];
+
+       expect(response.status).toBe(200);
+    } catch(error) {
+       console.log("An error occurred in testing: " + error?.status || error.message);
+       const response = error?.status || error.message;
+
+       expect(response).toBe(200);
     }
   });
 });

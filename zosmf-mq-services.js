@@ -109,6 +109,66 @@ async function readSysParms(ltpaToken, requestBody) {
 }
 
 /**
+ * Read one or more system parameters from CSQ4ZPRM.
+ * @param {string} sysParm - The system parameter to edited and its new value.
+ * @param {string} qmName - The queue manager name.
+ * @param {string} ltpaToken - The LTPA token.
+ * @returns {Promise<string>} The value of the parameter.
+ */
+async function editSysParms(ltpaToken, requestBody) {
+
+  // Extract the queue manager name from the request body
+  const qmName = requestBody.qmName;
+
+  // get the whole CSQ4ZPRM dataset for this queue manager
+  try {
+    // Build the request config
+    let config = {
+      method: 'get',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4ZPRM)',
+      headers: {
+        'Cookie': 'LtpaToken2=' + ltpaToken
+      },
+      httpsAgent
+    };
+
+    // Execute the zOSMF request to get the dataset
+    let zosmfResponse = await zosmfRequest(config);
+
+    // Check the zosmfResponse status, only proceed if zosmfResponse succeeded
+    if (zosmfResponse.status != 200) {
+      return zosmfResponse;
+    }
+
+    // Find the line in zosmfResponse.data or .body? which has the parameter value
+    console.log(zosmfResponse.data);
+
+    // Check its the correct line and not a comment or something
+
+    // Update the value part of that line to our new value
+
+    // Execute zosmf call to update that JCL with our new JCL
+
+    // Return all other axios errors and use optional chaining and default values to catch misc errors
+    return;
+
+
+  } catch(error) {
+    console.error('Error occured in readSysParm');
+
+    // Return all other axios errors and use optional chaining and default values to catch misc errors
+    return {
+      status: error.response?.status || 500,
+      statusText: error.response?.statusText || 'Internal Server Error',
+      data: error.response?.data || error.message
+    };
+
+  }
+}
+
+/**
  * Extracts a single parameter from a CSQ4ZPRM formatted JCL job.
  * @param {string} jcl - The JCL string to search.
  * @param {string} sysParm - The parameter to extract.
@@ -129,7 +189,6 @@ async function extractParm(jcl, sysParm) {
       if(line.substring(0,2) == "//" ||
          line.substring(paramPosition + sysParm.length, paramPosition + sysParm.length + 1) != "=" ||
          line.substring(paramPosition - 1, paramPosition) != " ") {
-        console.log("Parm found but not on the correct line");
         continue;
       }
 
@@ -196,5 +255,6 @@ async function zosmfRequest(config) {
 module.exports = {
   readSysParms,
   extractParm,
-  zosmfRequest
+  zosmfRequest, 
+  editSysParms
 };

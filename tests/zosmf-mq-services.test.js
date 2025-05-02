@@ -1,6 +1,6 @@
 ﻿const fs = require('fs');
 const path = require('path');
-const { extractParm } = require('./zosmf-mq-services');
+const { extractParm } = require('../zosmf-mq-services');
 const axios = require('axios');
 const http = require('http');
 const https = require('https');
@@ -17,7 +17,7 @@ describe('extractParm', () => {
 
   beforeAll(() => {
     // Read the contents of the example-csq4zprm.jcl file
-    const filePath = path.join(__dirname, 'example-csq4zprm.jcl');
+    const filePath = path.join(__dirname, '..', 'example-csq4zprm.jcl');
     jclContent = fs.readFileSync(filePath, 'utf8');
   });
 
