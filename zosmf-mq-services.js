@@ -259,11 +259,9 @@ async function editJclLine(jclLine, sysParm, updateValue) {
           updatedLine = updatedLine.substring(0, 65) + "      X";
         } 
       }
-
       // Join the updated line
       return updatedLine;
     }
-
     // Return the original line if the parameter is not found
     return jclLine; 
 }
