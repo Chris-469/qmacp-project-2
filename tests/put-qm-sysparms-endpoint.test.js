@@ -55,10 +55,10 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
     }
   });
   
-  it('UR(6.2) - should update INBUFF parameter to a random int between 28-60', async () => {
+  it('UR(6.2) - should update INBUFF parameter to 28-60 int', async () => {
 
     // sets inbuff to a random value between 28-60
-    let inbuffValue = Math.floor(Math.random() * (60 - 28 + 1)) + 28;
+    let inbuffValue = getRandomInt(28, 60);
 
     // build the body basic config for the requests
     let tokenConfig = {
@@ -83,6 +83,8 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
 
       // send the request to update the parameter
       response = await axios.request(tokenConfig);
+
+      await new Promise(resolve => setTimeout(resolve, 500));
 
     } catch(error) {
       console.log("An error occurred while updating the parameter in testing: " + error);
@@ -112,6 +114,252 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
     }
 
   });
+
+  it('UR(6.2) - should update TWOARCH parameter to YES/NO', async () => {
+  let twoarchValue = getRandomYesOrNo();
+
+  let tokenConfig = {
+    timeout: 10000,
+    maxBodyLength: Infinity,
+    url: serverURL + "qm-sysparms",
+    headers: {
+      'Cookie': ltpaToken2,
+    },
+  };
+
+  try {
+    tokenConfig.method = 'put';
+    tokenConfig.data = {
+      "qmName": "MQ1A",
+      "sysParms": {
+        "TWOARCH": twoarchValue,
+      },
+    };
+
+    let response = await axios.request(tokenConfig);
+    console.log("PUT response:", response.data);
+
+    await new Promise(resolve => setTimeout(resolve, 500));
+  } catch (error) {
+    console.log("An error occurred while updating TWOARCH:", error);
+    const response = error?.status || error.message;
+    expect(response).toBe(200);
+  }
+
+  try {
+    tokenConfig.method = 'get';
+    tokenConfig.data = {
+      "qmName": "MQ1A",
+      "sysParms": "TWOARCH",
+    };
+
+    let response = await axios.request(tokenConfig);
+    console.log("GET response:", response.data);
+
+    expect(response.data.data.TWOARCH).toBe(twoarchValue);
+  } catch (error) {
+    console.log("An error occurred while reading TWOARCH:", error);
+    const response = error?.status || error.message;
+    expect(response).toBe(200);
+  }
+  });
+
+  it('UR(6.2) - should update ARCWRTC parameter to random (1,3,4)', async () => {
+    let arcwrtcValue = '(1,' + getRandomInt(1, 4) + ',4)';
+
+    let tokenConfig = {
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms",
+      headers: {
+        'Cookie': ltpaToken2,
+      },
+    };
+
+    try {
+      tokenConfig.method = 'put';
+      tokenConfig.data = {
+        "qmName": "MQ1A",
+        "sysParms": {
+          "ARCWRTC": arcwrtcValue,
+        },
+      };
+
+      let response = await axios.request(tokenConfig);
+      console.log("PUT response:", response.data);
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+    } catch (error) {
+      console.log("An error occurred while updating ARCWRTC:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+
+    try {
+      tokenConfig.method = 'get';
+      tokenConfig.data = {
+        "qmName": "MQ1A",
+        "sysParms": "ARCWRTC",
+      };
+
+      let response = await axios.request(tokenConfig);
+      console.log("GET response:", response.data);
+
+      expect(response.data.data.ARCWRTC).toBe(arcwrtcValue);
+    } catch (error) {
+      console.log("An error occurred while reading ARCWRTC:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+  });
+
+  it('UR(6.2) - should update OTMACON parameter to (MQSERIES,,DFSYDRU0,2147483647,CSQ) with random account number', async () => {
+    let otmaconValue = '(MQSERIES,,DFSYDRU0,' + getRandomInt(1000000000, 5000000000) + ',CSQ)';
+
+    let tokenConfig = {
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms",
+      headers: {
+        'Cookie': ltpaToken2,
+      },
+    };
+
+    try {
+      tokenConfig.method = 'put';
+      tokenConfig.data = {
+        "qmName": "MQ1A",
+        "sysParms": {
+          "OTMACON": otmaconValue,
+        },
+      };
+
+      let response = await axios.request(tokenConfig);
+      console.log("PUT response:", response.data);
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+    } catch (error) {
+      console.log("An error occurred while updating OTMACON:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+
+    try {
+      tokenConfig.method = 'get';
+      tokenConfig.data = {
+        "qmName": "MQ1A",
+        "sysParms": "OTMACON",
+      };
+
+      let response = await axios.request(tokenConfig);
+      console.log("GET response:", response.data);
+
+      expect(response.data.data.OTMACON).toBe(otmaconValue);
+    } catch (error) {
+      console.log("An error occurred while reading OTMACON:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+  });
+
+  it('UR(6.2) - should update TRACSTR parameter to YES/NO', async () => {
+    let tracstrValue = getRandomYesOrNo();
+
+    let tokenConfig = {
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms",
+      headers: {
+        'Cookie': ltpaToken2,
+      },
+    };
+
+    try {
+      tokenConfig.method = 'put';
+      tokenConfig.data = {
+        "qmName": "MQ1A",
+        "sysParms": {
+          "TRACSTR": tracstrValue,
+        },
+      };
+
+      let response = await axios.request(tokenConfig);
+      console.log("PUT response:", response.data);
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+    } catch (error) {
+      console.log("An error occurred while updating TRACSTR:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+
+    try {
+      tokenConfig.method = 'get';
+      tokenConfig.data = {
+        "qmName": "MQ1A",
+        "sysParms": "TRACSTR",
+      };
+
+      let response = await axios.request(tokenConfig);
+      console.log("GET response:", response.data);
+
+      expect(response.data.data.TRACSTR).toBe(tracstrValue);
+    } catch (error) {
+      console.log("An error occurred while reading TRACSTR:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+  });
+
+  it('UR(6.2) - should update EXITLIM parameter to 0-30 int', async () => {
+    let exitlimValue = getRandomInt(1, 30);
+
+    let tokenConfig = {
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms",
+      headers: {
+        'Cookie': ltpaToken2,
+      },
+    };
+
+    try {
+      tokenConfig.method = 'put';
+      tokenConfig.data = {
+        "qmName": "MQ1A",
+        "sysParms": {
+          "EXITLIM": exitlimValue.toString(),
+        },
+      };
+
+      let response = await axios.request(tokenConfig);
+      console.log("PUT response:", response.data);
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+    } catch (error) {
+      console.log("An error occurred while updating EXITLIM:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+
+    try {
+      tokenConfig.method = 'get';
+      tokenConfig.data = {
+        "qmName": "MQ1A",
+        "sysParms": "EXITLIM",
+      };
+
+      let response = await axios.request(tokenConfig);
+      console.log("GET response:", response.data);
+
+      expect(response.data.data.EXITLIM).toBe(exitlimValue.toString());
+    } catch (error) {
+      console.log("An error occurred while reading EXITLIM:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+  });
+
 });
 
 /**
@@ -549,4 +797,25 @@ function extractValue(line, paramName) {
 
   // Return the value
   return value;
+}
+
+/**
+ * Returns a random integer between min and max (inclusive).
+ * @param {number} min - The minimum value.
+ * @param {number} max - The maximum value.
+ * @returns {number} A random integer between min and max.
+ */
+function getRandomInt(min, max) {
+  if (min > max) {
+    throw new Error("The min value must be less than or equal to the max value.");
+  }
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Returns a random value of either "YES" or "NO".
+ * @returns {string} "YES" or "NO".
+ */
+function getRandomYesOrNo() {
+  return Math.random() < 0.5 ? "YES" : "NO";
 }
