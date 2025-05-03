@@ -20,6 +20,7 @@ const httpsAgent = new https.Agent({
  */
 async function readSysParms(ltpaToken, requestBody) {
   // Extract the queue manager name from the request body
+  console.log("Read sysParms called");
   const qmName = requestBody.qmName;
   let returnParameters = {};
 
@@ -43,6 +44,7 @@ async function readSysParms(ltpaToken, requestBody) {
     };
 
     // do the request to zosmf
+    console.log("Calling zosmfRequest from readSysParms");
     let zosmfResponse = await zosmfRequest(config);
 
     // Check the zosmfResponse status, only proceed if zosmfResponse succeeded
@@ -73,6 +75,7 @@ async function readSysParms(ltpaToken, requestBody) {
     else
     {
       // Check if the last character of sysParms is a comma and remove it if necessary
+      console.log("Parsing sysParms from request body");
       while (requestBody.sysParms.endsWith(',')) {
         requestBody.sysParms = requestBody.sysParms.slice(0, -1);
       }
@@ -84,11 +87,13 @@ async function readSysParms(ltpaToken, requestBody) {
       for (const parm of requestSysParms) {
         // Extract the value of the parameter
         const value = await extractParm(zosmfResponse.data, parm);
+        console.log("Extracted parameter: " + parm + " with value: " + value);
 
         // Add it to the response
         returnParameters[parm] = value;
       }
     }
+    console.log("Returning parameters: " + JSON.stringify(returnParameters));
     return {
       status: 200,
       statusText: 'Request successful',
