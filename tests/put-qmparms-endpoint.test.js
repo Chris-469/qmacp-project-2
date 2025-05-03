@@ -82,12 +82,7 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
       }
 
       // send the request to update the parameter
-      console.log("Sending request to update parameter");
       response = await axios.request(tokenConfig);
-      console.log("Parameter updated");
-
-      // Add a delay to allow the update to propagate
-      await new Promise(resolve => setTimeout(resolve, 2000));
 
     } catch(error) {
       console.log("An error occurred while updating the parameter in testing: " + error);
@@ -106,16 +101,7 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
       }
 
       // send the request to read the parameter
-      console.log("Sending request to read parameter");
       response = await axios.request(tokenConfig);
-      console.log("Parameter read");
-
-      // check that the parameter was updated correctly
-      console.log(response.data);
-
-      console.log("INBUFF: " + response.data.data.INBUFF);
-      console.log("Expected: " + inbuffValue.toString());
-
       expect(response.data.data.INBUFF).toBe(inbuffValue.toString());
     }
     catch (error) {
