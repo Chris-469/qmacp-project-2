@@ -15,7 +15,7 @@ async function utilityFunction() {
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: zosmfURL + 'restfiles/ds/VICY.MQ1A.V9XX.SCSQPROC(CSQ4ZPRM)',
+      url: zosmfURL + 'restfiles/ds/VICY.MQ1A.V9XX.SCSQPROC(CSQ4RPRM)',
       headers: {
         //'Authorization' : 'Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHkz'
         'Cookie': 'LtpaToken2=LcBUxQyEaxEuSSP/vN+gKVIQPwp00XjKFkc+8lYtxRuJk/pjhnXpIkOQCjkb3pfZbOalv7qWfk95R/VjHEX9QE1+pHZzE6ZucvkfI56XdwHy21REzDyll6DRQx916GRxNkW12L2ohyJ2c/xxG7MRzYUpPyc1AfV0RYHGl6x0hVak27UsA8Xs8YnX5ENvGMHA6hQJbA78jE+6dmmIz7z0Xheml7rnOcYfp87/qPh1NKrIdJVrtRplHvCElWvU2uBs58YLZmmCuBOqtHxOYWIaGEae/QX8eBrtSHtPE2q53sV4fc4h9N7oBHYU8czei0X9'

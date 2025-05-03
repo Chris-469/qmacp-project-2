@@ -416,7 +416,7 @@ describe('The editJclLine function should edit the value of any given parameter'
   });
 });
 
-describe('The editJcl parameter should return a correctly edited CSQ4ZPRM', () => {
+describe('The editJcl parameter should return a correctly edited CSQ4RPRM', () => {
   let jclContent;
 
   beforeAll(() => {

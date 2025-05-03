@@ -12,7 +12,7 @@ const httpsAgent = new https.Agent({
 
 // Assisted by watsonx Code Assistant
 /**
- * Read one or more system parameters from CSQ4ZPRM.
+ * Read one or more system parameters from CSQ4RPRM.
  * @param {string} sysParm - The system parameter to read.
  * @param {string} qmName - The queue manager name.
  * @param {string} ltpaToken - The LTTP token.
@@ -29,14 +29,14 @@ async function readSysParms(ltpaToken, requestBody) {
     requestBody.sysParms = 'ALL';
   }
 
-  // get the CSQ4ZPRM dataset for this queue manager
+  // get the CSQ4RPRM dataset for this queue manager
   try {
     // Build the request config
     let config = {
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4ZPRM)',
+      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4RPRM)',
       headers: {
         'Cookie': 'LtpaToken2=' + ltpaToken
       },
@@ -113,7 +113,7 @@ async function readSysParms(ltpaToken, requestBody) {
 }
 
 /**
- * Edit a parameter in CSQ4ZPRM.
+ * Edit a parameter in CSQ4RPRM.
  * @param {string} sysParm - The system parameter to edited and its new value.
  * @param {string} qmName - The queue manager name.
  * @param {string} ltpaToken - The LTPA token.
@@ -124,14 +124,14 @@ async function editSysParms(ltpaToken, requestBody) {
   // Extract the queue manager name from the request body
   const qmName = requestBody.qmName;
 
-  // get the whole CSQ4ZPRM dataset for this queue manager
+  // get the whole CSQ4RPRM dataset for this queue manager
   try {
     // Build the request config
     let config = {
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4ZPRM)',
+      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4RPRM)',
       headers: {
         'Cookie': 'LtpaToken2=' + ltpaToken
       },
@@ -272,7 +272,7 @@ async function editJclLine(jclLine, sysParm, updateValue) {
 }
 
 /**
- * Extracts a single parameter from a CSQ4ZPRM formatted JCL job.
+ * Extracts a single parameter from a CSQ4RPRM formatted JCL job.
  * @param {string} jcl - The JCL string to search.
  * @param {string} sysParm - The parameter to extract.
  * @returns {string|null} The value of the parameter if found, or null if not found.

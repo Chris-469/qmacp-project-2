@@ -32,7 +32,7 @@
       "Accept-Encoding": "gzip, compress, deflate, br"
     },
     "method": "get",
-    "url": "https://winmvs3c.hursley.ibm.com:32070/zosmf/restfiles/ds/VICY.MQ1A.V9XX.SCSQPROC(CSQ4ZPRM)"
+    "url": "https://winmvs3c.hursley.ibm.com:32070/zosmf/restfiles/ds/VICY.MQ1A.V9XX.SCSQPROC(CSQ4RPRM)"
   },
   "code": "ENOTFOUND"
 }
