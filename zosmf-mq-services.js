@@ -18,14 +18,13 @@ const httpsAgent = new https.Agent({
  * @param {string} ltpaToken - The LTTP token.
  * @returns {Promise<string>} The value of the parameter.
  */
-async function readSysParms(ltpaToken, requestBody) {
+async function readSysParms(qmName, ltpaToken, requestBody) {
   // Extract the queue manager name from the request body
-  const qmName = requestBody.qmName;
   let returnParameters = {};
 
   // Check whether we need to extract all system parameters from csq4zprm
-  if(!requestBody.sysParms) {
-    requestBody.sysParms = 'ALL';
+  if(Object.keys(requestBody).length === 0) {
+    requestBody = 'ALL';
   }
 
   // get the CSQ4RPRM dataset for this queue manager
@@ -51,7 +50,7 @@ async function readSysParms(ltpaToken, requestBody) {
     }
 
     // Parse the system parameters from the csq4zprm file
-    if(requestBody.sysParms == 'ALL') {
+    if(requestBody == 'ALL') {
 
       console.log("Reading all parameters from json file");
 
@@ -73,12 +72,12 @@ async function readSysParms(ltpaToken, requestBody) {
     else
     {
       // Check if the last character of sysParms is a comma and remove it if necessary
-      while (requestBody.sysParms.endsWith(',')) {
-        requestBody.sysParms = requestBody.sysParms.slice(0, -1);
+      while (requestBody.endsWith(',')) {
+        requestBody = requestBody.slice(0, -1);
       }
 
       // Return only the selected system parameters
-      const requestSysParms = requestBody.sysParms.split(',');
+      const requestSysParms = requestBody.split(',');
 
       // Loop through all requested sysparms and return each one
       for (const parm of requestSysParms) {
@@ -114,10 +113,7 @@ async function readSysParms(ltpaToken, requestBody) {
  * @param {string} ltpaToken - The LTPA token.
  * @returns {Promise<string>} The value of the parameter.
  */
-async function editSysParms(ltpaToken, requestBody) {
-
-  // Extract the queue manager name from the request body
-  const qmName = requestBody.qmName;
+async function editSysParms(qmName, ltpaToken, requestBody) {
 
   // get the whole CSQ4RPRM dataset for this queue manager
   try {
@@ -142,7 +138,7 @@ async function editSysParms(ltpaToken, requestBody) {
     }
 
     // Update the JCL with the new parameter value
-    let updatedJCL = await editJCL(zosmfResponse.data, requestBody.sysParms);
+    let updatedJCL = await editJCL(zosmfResponse.data, requestBody);
 
     // Execute zOSMF request to update the dataset TODO update CSQ4RPRM to correct name when testing has finshed
     config = {

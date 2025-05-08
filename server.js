@@ -161,7 +161,7 @@ app.get('/qm-sysparms', async (req, res)=>{
   console.log("GET /qm-sysparms endpoint was called");
 
   // Check if the request is missing queue manager name
-  if (!req.body.qmName) {
+  if (!req.query.qmName) {
     // Return 400 since queue manager name is missing
     return res.status(400).send({
       'status': 400,
@@ -180,10 +180,8 @@ app.get('/qm-sysparms', async (req, res)=>{
     });
   }
 
-  // TODO - Check if the request has a sysParms field, otherwise dont continue
-
   // Pass the relevant fields to the readSysParm function and wait for the response
-  const response = await readSysParms(req.cookies.LtpaToken2, req.body);
+  const response = await readSysParms(req.query.qmName, req.cookies.LtpaToken2, req.body.sysParms);
 
   // Send the response
   res.status(response.status);
@@ -229,7 +227,7 @@ app.put('/qm-sysparms', async (req, res)=>{
   console.log("PUT /qm-sysparms endpoint was called");
 
   // Check if the request is missing queue manager name
-  if (!req.body.qmName) {
+  if (!req.query.qmName) {
     // Return 400 since queue manager name is missing
     return res.status(400).send({
       'status': 400,
@@ -249,7 +247,7 @@ app.put('/qm-sysparms', async (req, res)=>{
   }
 
   // Pass the relevant fields to the editSysParms function and wait for the response
-  const response = await editSysParms(req.cookies.LtpaToken2, req.body);
+  const response = await editSysParms(req.query.qmName, req.cookies.LtpaToken2, req.body);
 
   // Send the response
   if (response.status == 204) {
