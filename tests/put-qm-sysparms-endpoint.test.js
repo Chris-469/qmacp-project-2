@@ -1,7 +1,7 @@
 ﻿const path = require('path');
 const axios = require('axios');
 const fs = require('fs');
-const { editJclLine, editJCL } = require('../zosmf-mq-services');
+const { editJclLine, editJCL } = require('../app/zosmf-mq-services');
 const express = require('express');
 const app = express();
 const PORT = 3000;
