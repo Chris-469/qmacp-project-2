@@ -180,6 +180,8 @@ app.get('/qm-sysparms', async (req, res)=>{
     });
   }
 
+  console.log("Request body: ", req.body);
+  
   // Pass the relevant fields to the readSysParm function and wait for the response
   const response = await readSysParms(req.query.qmName, req.cookies.LtpaToken2, req.body.sysParms);
 

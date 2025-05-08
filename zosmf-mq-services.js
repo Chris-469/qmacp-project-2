@@ -23,7 +23,9 @@ async function readSysParms(qmName, ltpaToken, requestBody) {
   let returnParameters = {};
 
   // Check whether we need to extract all system parameters from csq4zprm
-  if(Object.keys(requestBody).length === 0) {
+  if(requestBody == undefined ||
+    requestBody == null ||
+    Object.keys(requestBody).length === 0) {
     requestBody = 'ALL';
   }
 
@@ -130,7 +132,13 @@ async function editSysParms(qmName, ltpaToken, requestBody) {
     };
 
     // Execute the zOSMF request to get the dataset
+    console.log("Calling zosmfRequest from editSysParms");
+    console.log("Editing dataset member: " + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4RPRM)');
+
     let zosmfResponse = await zosmfRequest(config);
+    console.log("Response status: " + zosmfResponse.status);
+    console.log("Response statusText: " + zosmfResponse.statusText);
+    console.log("Response data: " + zosmfResponse.data);
 
     // Check the zosmfResponse status, only proceed if zosmfResponse succeeded
     if (zosmfResponse.status != 200) {
