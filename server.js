@@ -131,9 +131,9 @@ app.post('/authenticate', async (req, res) => {
  * /qm-sysparms:
  *   get:
  *     summary: Get system parameters for a queue manager
- *     description: Retrieve system parameters for a specified queue manager.
+ *     description: Retrieve system parameters for a specified queue manager. A mandatory query parameter `qmName` must be provided to specify the queue manager. Optionally, a request body can include a `sysParms` field containing a comma-separated list of system parameter names to retrieve. If `sysParms` is not provided, all system parameters are returned by default.
  *     parameters:
- *       - in: body
+ *       - in: query
  *         name: qmName
  *         description: The name of the queue manager.
  *         required: true
@@ -145,9 +145,39 @@ app.post('/authenticate', async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
+ *     requestBody:
+ *       description: Optional request body containing a comma-separated list of system parameters to retrieve.
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               sysParms:
+ *                 type: string
+ *                 description: A comma-separated list of system parameter names to retrieve.
+ *                 example: "INBUFF,QSGDATA"
  *     responses:
  *       200:
  *         description: System parameters retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 statusText:
+ *                   type: string
+ *                   example: "Request successful"
+ *                 data:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: string
+ *                   example:
+ *                     INBUFF: "60"
+ *                     QSGDATA: "YES"
  *       400:
  *         description: Mandatory parameter qmName or LtpaToken2 is missing
  *       401:
@@ -166,7 +196,7 @@ app.get('/qm-sysparms', async (req, res)=>{
     return res.status(400).send({
       'status': 400,
       'statusText': 'Mandatory parameter qmName is missing',
-      'data': 'The request failed because the mandatory qmName field was missing from the body. Please try again and provide a valid qmName field'
+      'data': 'The request failed because the mandatory qmName field was missing from parameters. Please try again and provide a valid qmName field'
     });
   }
 
@@ -181,7 +211,7 @@ app.get('/qm-sysparms', async (req, res)=>{
   }
 
   console.log("Request body: ", req.body);
-  
+
   // Pass the relevant fields to the readSysParm function and wait for the response
   const response = await readSysParms(req.query.qmName, req.cookies.LtpaToken2, req.body.sysParms);
 
@@ -199,9 +229,9 @@ app.get('/qm-sysparms', async (req, res)=>{
  * /qm-sysparms:
  *   put:
  *     summary: Edit system parameters for a queue manager
- *     description: Edit any system parameters for a specified queue manager.
+ *     description: Edit one or more system parameters for a specified queue manager. A mandatory query parameter `qmName` must be provided to specify the queue manager. The request body must contain at least one parameter to update.
  *     parameters:
- *       - in: body
+ *       - in: query
  *         name: qmName
  *         description: The name of the queue manager.
  *         required: true
@@ -213,11 +243,34 @@ app.get('/qm-sysparms', async (req, res)=>{
  *         required: true
  *         schema:
  *           type: string
+ *     requestBody:
+ *       description: A JSON object containing at least one system parameter to update.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             additionalProperties:
+ *               type: string
+ *             example:
+ *               INBUFF: "40"
+ *               OUTBUFF: "100"
  *     responses:
  *       200:
  *         description: System parameters updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 statusText:
+ *                   type: string
+ *                   example: "JCL updated successfully"
  *       400:
- *         description: Mandatory parameter qmName or LtpaToken2 is missing
+ *         description: Mandatory parameter qmName or LtpaToken2 is missing, or the request body is invalid
  *       401:
  *         description: Credentials invalid
  *       500:
@@ -234,7 +287,7 @@ app.put('/qm-sysparms', async (req, res)=>{
     return res.status(400).send({
       'status': 400,
       'statusText': 'Mandatory parameter qmName is missing',
-      'data': 'The request failed because the mandatory qmName field was missing from the body. Please try again and provide a valid qmName field'
+      'data': 'The request failed because the mandatory qmName field was missing from the parameters. Please try again and provide a valid qmName field'
     });
   }
 
