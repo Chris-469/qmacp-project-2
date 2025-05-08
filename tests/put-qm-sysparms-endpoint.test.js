@@ -81,7 +81,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
 
       // send the request to update the parameter
       response = await axios.request(tokenConfig);
-      console.log("PUT response:", response.data);
 
     } catch(error) {
       console.log("An error occurred while updating the parameter in testing: " + error);
@@ -130,7 +129,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
     };
 
     let response = await axios.request(tokenConfig);
-    console.log("PUT response:", response.data);
 
     await new Promise(resolve => setTimeout(resolve, 500));
   } catch (error) {
@@ -146,7 +144,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
     };
 
     let response = await axios.request(tokenConfig);
-    console.log("GET response:", response.data);
 
     expect(response.data.data.TWOARCH).toBe(twoarchValue);
   } catch (error) {
@@ -175,7 +172,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
       };
 
       let response = await axios.request(tokenConfig);
-      console.log("PUT response:", response.data);
 
       await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
@@ -191,7 +187,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
       };
 
       let response = await axios.request(tokenConfig);
-      console.log("GET response:", response.data);
 
       expect(response.data.data.ARCWRTC).toBe(arcwrtcValue);
     } catch (error) {
@@ -220,7 +215,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
       };
 
       let response = await axios.request(tokenConfig);
-      console.log("PUT response:", response.data);
 
       await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
@@ -236,7 +230,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
       };
 
       let response = await axios.request(tokenConfig);
-      console.log("GET response:", response.data);
 
       expect(response.data.data.OTMACON).toBe(otmaconValue);
     } catch (error) {
@@ -265,7 +258,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
       };
 
       let response = await axios.request(tokenConfig);
-      console.log("PUT response:", response.data);
 
       await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
@@ -281,7 +273,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
       };
 
       let response = await axios.request(tokenConfig);
-      console.log("GET response:", response.data);
 
       expect(response.data.data.TRACSTR).toBe(tracstrValue);
     } catch (error) {
@@ -310,7 +301,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
       };
 
       let response = await axios.request(tokenConfig);
-      console.log("PUT response:", response.data);
 
       await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
@@ -326,7 +316,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
       };
 
       let response = await axios.request(tokenConfig);
-      console.log("GET response:", response.data);
 
       expect(response.data.data.EXITLIM).toBe(exitlimValue.toString());
     } catch (error) {
