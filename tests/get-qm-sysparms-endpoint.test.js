@@ -1,7 +1,209 @@
-﻿const fs = require('fs');
-const path = require('path');
+﻿const path = require('path');
+const axios = require('axios');
+const fs = require('fs');
 const { extractParm } = require('../zosmf-mq-services');
+const express = require('express');
+const app = express();
+const PORT = 3000;
 
+const serverURL = "http://9.20.194.48:3000/"
+
+const validCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
+const invalidCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
+let ltpaToken2 = false;
+
+let validCredentialsConfig = {
+  method: 'put',
+  timeout: 10000,
+  maxBodyLength: Infinity,
+  url: serverURL,
+  headers: {
+    'Authorization': validCredentials,
+    },
+ }
+
+/**
+ * Endpoint testing for GET /qm-sysparms
+*/
+describe('UR(4) - Users must be able to retrieve the current system parameters of an MQ queue manager',  () => {
+
+  // Perform authentication before running the tests
+  beforeAll(async () => {
+    let config = {
+      method: 'post',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "authenticate",
+      headers: {
+        'Authorization': validCredentials, // Valid Credentials
+        },
+      }
+
+    try{
+       // execute the request to the server
+       const response = await axios.request(config);
+
+       // set the ltpatoken2 test variable for subsequent tests
+       ltpaToken2 = response.headers['set-cookie'];
+
+       expect(response.status).toBe(200);
+    } catch(error) {
+       console.log("An error occurred in testing: " + error?.status || error.message);
+       const response = error?.status || error.message;
+
+       expect(response).toBe(200);
+    }
+  });
+  
+  it('UR(4.1) - a GET request to the /system-parameters endpoint returns response code 200', async () => {
+
+    // build the body basic config for the requests
+    let config = {
+      method: 'get',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms",
+      headers: {
+        'Cookie' : ltpaToken2
+        },
+      data: {
+        "qmName": "MQ1A",
+        "sysParms" : "INBUFF,QSGDATA"
+      }
+    }
+
+    try {
+      let response;
+
+      // send the request to update the parameter
+      response = await axios.request(config);
+
+      // check response status
+      expect(response.status).toBe(200);
+      }
+      catch (error) {
+        console.log("An error occurred while reading the parameter in testing: " + error);
+        const response = error?.status || error.message;
+  
+        expect(response).toBe(200);
+      }
+  });
+
+  it('UR(4.1) - specifying no sysparms returns all sysparms', async () => {
+
+    // build the body basic config for the requests
+    let config = {
+      method: 'get',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms",
+      headers: {
+        'Cookie' : ltpaToken2
+        },
+      data: {
+        "qmName": "MQ1A"
+      }
+    }
+
+    try {
+      let response;
+
+      // send the request to update the parameter
+      response = await axios.request(config);
+
+      // check length of 51, indicating all sysparms returned
+      const sysparmsLength = Object.keys(response.data.data).length;
+      expect(sysparmsLength).toBe(51);
+      }
+      catch (error) {
+        console.log("An error occurred while reading the parameter in testing: " + error);
+        const response = error?.status || error.message;
+  
+        expect(response).toBe(200);
+      }
+  });
+
+  it('UR(4.1) - requesting one sysparm only returns that sysparm', async () => {
+
+    // build the body basic config for the requests
+    let config = {
+      method: 'get',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms",
+      headers: {
+        'Cookie' : ltpaToken2
+        },
+      data: {
+        "qmName": "MQ1A",
+        "sysParms" : "INBUFF"
+      }
+    }
+
+    try {
+      let response;
+
+      // send the request to update the parameter
+      response = await axios.request(config);
+      const keys = Object.keys(response.data.data);
+
+      // Check that the first key is "INBUFF"
+      expect(keys.length).toBe(1); // Ensure only one key is returned
+      expect(keys[0]).toBe("INBUFF"); // Check that the key is "INBUFF"
+      }
+      catch (error) {
+        console.log("An error occurred while reading the parameter in testing: " + error);
+        const response = error?.status || error.message;
+  
+        expect(response).toBe(200);
+      }
+  });
+
+  it('UR(4.1) - requesting several sysparms returns only those sysparms', async () => {
+
+    // build the body basic config for the requests
+    let config = {
+      method: 'get',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms",
+      headers: {
+        'Cookie' : ltpaToken2
+        },
+      data: {
+        "qmName": "MQ1A",
+        "sysParms" : "INBUFF,QSGDATA,MAXRTU,DEALLCT"
+      }
+    }
+
+    try {
+      let response;
+
+      // send the request to update the parameter
+      response = await axios.request(config);
+      const keys = Object.keys(response.data.data);
+
+      // Check that the first key is "INBUFF"
+      expect(keys.length).toBe(4); // Ensure only one key is returned
+      
+      // Check that the keys are "INBUFF", "QSGDATA", "MAXRTU", and "DEALLCT"
+      expect(keys[0]).toBe("INBUFF");
+      expect(keys[1]).toBe("QSGDATA");
+      expect(keys[2]).toBe("MAXRTU");
+      expect(keys[3]).toBe("DEALLCT");
+      }
+      catch (error) {
+        console.log("An error occurred while reading the parameter in testing: " + error);
+        const response = error?.status || error.message;
+  
+        expect(response).toBe(200);
+      }
+  });
+});
+
+/**
+ * Function testing section
+ */
 describe('The extractParm function should extract the value of any valid system parameter', () => {
   let jclContent;
 

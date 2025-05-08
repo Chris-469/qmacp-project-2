@@ -23,7 +23,7 @@ let validCredentialsConfig = {
  }
 
 /**
- * Endpoint testing section
+ * Endpoint testing for PUT /qm-sysparms
 */
 describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms',  () => {
 
