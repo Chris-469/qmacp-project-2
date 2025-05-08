@@ -24,9 +24,9 @@ let validCredentialsConfig = {
  }
 
 /**
- * Endpoint testing for PUT /qm-sysparms
+ * Endpoint testing for PUT /qm/sysparms
 */
-describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms',  () => {
+describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms',  () => {
 
   // Perform authentication before running the tests
   beforeAll(async () => {
@@ -65,7 +65,7 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
     let tokenConfig = {
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
       headers: {
         'Cookie' : ltpaToken2
         },
@@ -117,7 +117,7 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
   let tokenConfig = {
     timeout: 10000,
     maxBodyLength: Infinity,
-    url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+    url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
     headers: {
       'Cookie': ltpaToken2,
     },
@@ -162,7 +162,7 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
     let tokenConfig = {
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
       headers: {
         'Cookie': ltpaToken2,
       },
@@ -207,7 +207,7 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
     let tokenConfig = {
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
       headers: {
         'Cookie': ltpaToken2,
       },
@@ -252,7 +252,7 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
     let tokenConfig = {
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
       headers: {
         'Cookie': ltpaToken2,
       },
@@ -297,7 +297,7 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
     let tokenConfig = {
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
       headers: {
         'Cookie': ltpaToken2,
       },

@@ -128,7 +128,7 @@ app.post('/authenticate', async (req, res) => {
 
 /**
  * @swagger
- * /qm-sysparms:
+ * /qm/sysparms:
  *   get:
  *     summary: Get system parameters for a queue manager
  *     description: Retrieve system parameters for a specified queue manager. A mandatory query parameter `qmName` must be provided to specify the queue manager. Optionally, a request body can include a `sysParms` field containing a comma-separated list of system parameter names to retrieve. If `sysParms` is not provided, all system parameters are returned by default.
@@ -177,7 +177,6 @@ app.post('/authenticate', async (req, res) => {
  *                     type: string
  *                   example:
  *                     INBUFF: "60"
- *                     QSGDATA: "YES"
  *       400:
  *         description: Mandatory parameter qmName or LtpaToken2 is missing
  *       401:
@@ -187,7 +186,7 @@ app.post('/authenticate', async (req, res) => {
  *       501:
  *         description: z/OSMF server inactive
  */
-app.get('/qm-sysparms', async (req, res)=>{
+app.get('/qm/sysparms', async (req, res)=>{
   console.log("GET /qm-sysparms endpoint was called");
 
   // Check if the request is missing queue manager name
@@ -226,7 +225,7 @@ app.get('/qm-sysparms', async (req, res)=>{
 
 /**
  * @swagger
- * /qm-sysparms:
+ * /qm/sysparms:
  *   put:
  *     summary: Edit system parameters for a queue manager
  *     description: Edit one or more system parameters for a specified queue manager. A mandatory query parameter `qmName` must be provided to specify the queue manager. The request body must contain at least one parameter to update.
@@ -278,7 +277,7 @@ app.get('/qm-sysparms', async (req, res)=>{
  *       501:
  *         description: z/OSMF server inactive
  */
-app.put('/qm-sysparms', async (req, res)=>{
+app.put('/qm/sysparms', async (req, res)=>{
   console.log("PUT /qm-sysparms endpoint was called");
 
   // Check if the request is missing queue manager name
@@ -289,6 +288,7 @@ app.put('/qm-sysparms', async (req, res)=>{
       'statusText': 'Mandatory parameter qmName is missing',
       'data': 'The request failed because the mandatory qmName field was missing from the parameters. Please try again and provide a valid qmName field'
     });
+
   }
 
   // Check if the request is missing an LtpaToken2

@@ -24,7 +24,7 @@ let validCredentialsConfig = {
  }
 
 /**
- * Endpoint testing for GET /qm-sysparms
+ * Endpoint testing for GET /qm/sysparms
 */
 describe('UR(4) - Users must be able to retrieve the current system parameters of an MQ queue manager',  () => {
 
@@ -63,7 +63,7 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
       headers: {
         'Cookie' : ltpaToken2
         },
@@ -98,7 +98,7 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
   //     method: 'get',
   //     timeout: 10000,
   //     maxBodyLength: Infinity,
-  //     url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+  //     url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
   //     headers: {
   //       'Cookie' : ltpaToken2
   //       },
@@ -130,7 +130,7 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
       headers: {
         'Cookie' : ltpaToken2
         },
@@ -165,7 +165,7 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
       headers: {
         'Cookie' : ltpaToken2
         },
