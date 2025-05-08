@@ -132,13 +132,7 @@ async function editSysParms(qmName, ltpaToken, requestBody) {
     };
 
     // Execute the zOSMF request to get the dataset
-    console.log("Calling zosmfRequest from editSysParms");
-    console.log("Editing dataset member: " + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4RPRM)');
-
     let zosmfResponse = await zosmfRequest(config);
-    console.log("Response status: " + zosmfResponse.status);
-    console.log("Response statusText: " + zosmfResponse.statusText);
-    console.log("Response data: " + zosmfResponse.data);
 
     // Check the zosmfResponse status, only proceed if zosmfResponse succeeded
     if (zosmfResponse.status != 200) {

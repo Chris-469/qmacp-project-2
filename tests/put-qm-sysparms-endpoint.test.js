@@ -76,9 +76,7 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
       let response;
       tokenConfig.method = 'put';
       tokenConfig.data = {
-        "sysParms" : {
-          "INBUFF" : inbuffValue.toString()
-        } 
+        "INBUFF" : inbuffValue.toString()
       }
 
       // send the request to update the parameter
@@ -113,240 +111,230 @@ describe('UR(6) - The PUT qm-sysparms endpoint should be able to update sysparms
 
   });
 
-  // it('UR(6.2) - should update TWOARCH parameter to YES/NO', async () => {
-  // let twoarchValue = getRandomYesOrNo();
+  it('UR(6.2) - should update TWOARCH parameter to YES/NO', async () => {
+  let twoarchValue = getRandomYesOrNo();
 
-  // let tokenConfig = {
-  //   timeout: 10000,
-  //   maxBodyLength: Infinity,
-  //   url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
-  //   headers: {
-  //     'Cookie': ltpaToken2,
-  //   },
-  // };
+  let tokenConfig = {
+    timeout: 10000,
+    maxBodyLength: Infinity,
+    url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+    headers: {
+      'Cookie': ltpaToken2,
+    },
+  };
 
-  // try {
-  //   tokenConfig.method = 'put';
-  //   tokenConfig.data = {
-  //     "sysParms": {
-  //       "TWOARCH": twoarchValue,
-  //     },
-  //   };
+  try {
+    tokenConfig.method = 'put';
+    tokenConfig.data = {
+      "TWOARCH": twoarchValue,
+    };
 
-  //   let response = await axios.request(tokenConfig);
-  //   console.log("PUT response:", response.data);
+    let response = await axios.request(tokenConfig);
+    console.log("PUT response:", response.data);
 
-  //   await new Promise(resolve => setTimeout(resolve, 500));
-  // } catch (error) {
-  //   console.log("An error occurred while updating TWOARCH:", error);
-  //   const response = error?.status || error.message;
-  //   expect(response).toBe(200);
-  // }
+    await new Promise(resolve => setTimeout(resolve, 500));
+  } catch (error) {
+    console.log("An error occurred while updating TWOARCH:", error);
+    const response = error?.status || error.message;
+    expect(response).toBe(200);
+  }
 
-  // try {
-  //   tokenConfig.method = 'get';
-  //   tokenConfig.data = {
-  //     "sysParms": "TWOARCH",
-  //   };
+  try {
+    tokenConfig.method = 'get';
+    tokenConfig.data = {
+      "sysParms": "TWOARCH",
+    };
 
-  //   let response = await axios.request(tokenConfig);
-  //   console.log("GET response:", response.data);
+    let response = await axios.request(tokenConfig);
+    console.log("GET response:", response.data);
 
-  //   expect(response.data.data.TWOARCH).toBe(twoarchValue);
-  // } catch (error) {
-  //   console.log("An error occurred while reading TWOARCH:", error);
-  //   const response = error?.status || error.message;
-  //   expect(response).toBe(200);
-  // }
-  // });
+    expect(response.data.data.TWOARCH).toBe(twoarchValue);
+  } catch (error) {
+    console.log("An error occurred while reading TWOARCH:", error);
+    const response = error?.status || error.message;
+    expect(response).toBe(200);
+  }
+  });
 
-  // it('UR(6.2) - should update ARCWRTC parameter to random (1,3,4)', async () => {
-  //   let arcwrtcValue = '(1,' + getRandomInt(1, 4) + ',4)';
+  it('UR(6.2) - should update ARCWRTC parameter to random (1,3,4)', async () => {
+    let arcwrtcValue = '(1,' + getRandomInt(1, 4) + ',4)';
 
-  //   let tokenConfig = {
-  //     timeout: 10000,
-  //     maxBodyLength: Infinity,
-  //     url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
-  //     headers: {
-  //       'Cookie': ltpaToken2,
-  //     },
-  //   };
+    let tokenConfig = {
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      headers: {
+        'Cookie': ltpaToken2,
+      },
+    };
 
-  //   try {
-  //     tokenConfig.method = 'put';
-  //     tokenConfig.data = {
-  //       "sysParms": {
-  //         "ARCWRTC": arcwrtcValue,
-  //       },
-  //     };
+    try {
+      tokenConfig.method = 'put';
+      tokenConfig.data = {
+        "ARCWRTC": arcwrtcValue,
+      };
 
-  //     let response = await axios.request(tokenConfig);
-  //     console.log("PUT response:", response.data);
+      let response = await axios.request(tokenConfig);
+      console.log("PUT response:", response.data);
 
-  //     await new Promise(resolve => setTimeout(resolve, 500));
-  //   } catch (error) {
-  //     console.log("An error occurred while updating ARCWRTC:", error);
-  //     const response = error?.status || error.message;
-  //     expect(response).toBe(200);
-  //   }
+      await new Promise(resolve => setTimeout(resolve, 500));
+    } catch (error) {
+      console.log("An error occurred while updating ARCWRTC:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
 
-  //   try {
-  //     tokenConfig.method = 'get';
-  //     tokenConfig.data = {
-  //       "sysParms": "ARCWRTC",
-  //     };
+    try {
+      tokenConfig.method = 'get';
+      tokenConfig.data = {
+        "sysParms": "ARCWRTC",
+      };
 
-  //     let response = await axios.request(tokenConfig);
-  //     console.log("GET response:", response.data);
+      let response = await axios.request(tokenConfig);
+      console.log("GET response:", response.data);
 
-  //     expect(response.data.data.ARCWRTC).toBe(arcwrtcValue);
-  //   } catch (error) {
-  //     console.log("An error occurred while reading ARCWRTC:", error);
-  //     const response = error?.status || error.message;
-  //     expect(response).toBe(200);
-  //   }
-  // });
+      expect(response.data.data.ARCWRTC).toBe(arcwrtcValue);
+    } catch (error) {
+      console.log("An error occurred while reading ARCWRTC:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+  });
 
-  // it('UR(6.2) - should update OTMACON parameter to (MQSERIES,,DFSYDRU0,2147483647,CSQ) with random account number', async () => {
-  //   let otmaconValue = '(MQSERIES,,DFSYDRU0,' + getRandomInt(1000000000, 5000000000) + ',CSQ)';
+  it('UR(6.2) - should update OTMACON parameter to (MQSERIES,,DFSYDRU0,2147483647,CSQ) with random account number', async () => {
+    let otmaconValue = '(MQSERIES,,DFSYDRU0,' + getRandomInt(1000000000, 5000000000) + ',CSQ)';
 
-  //   let tokenConfig = {
-  //     timeout: 10000,
-  //     maxBodyLength: Infinity,
-  //     url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
-  //     headers: {
-  //       'Cookie': ltpaToken2,
-  //     },
-  //   };
+    let tokenConfig = {
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      headers: {
+        'Cookie': ltpaToken2,
+      },
+    };
 
-  //   try {
-  //     tokenConfig.method = 'put';
-  //     tokenConfig.data = {
-  //       "sysParms": {
-  //         "OTMACON": otmaconValue,
-  //       },
-  //     };
+    try {
+      tokenConfig.method = 'put';
+      tokenConfig.data = {
+        "OTMACON": otmaconValue,
+      };
 
-  //     let response = await axios.request(tokenConfig);
-  //     console.log("PUT response:", response.data);
+      let response = await axios.request(tokenConfig);
+      console.log("PUT response:", response.data);
 
-  //     await new Promise(resolve => setTimeout(resolve, 500));
-  //   } catch (error) {
-  //     console.log("An error occurred while updating OTMACON:", error);
-  //     const response = error?.status || error.message;
-  //     expect(response).toBe(200);
-  //   }
+      await new Promise(resolve => setTimeout(resolve, 500));
+    } catch (error) {
+      console.log("An error occurred while updating OTMACON:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
 
-  //   try {
-  //     tokenConfig.method = 'get';
-  //     tokenConfig.data = {
-  //       "sysParms": "OTMACON",
-  //     };
+    try {
+      tokenConfig.method = 'get';
+      tokenConfig.data = {
+        "sysParms": "OTMACON",
+      };
 
-  //     let response = await axios.request(tokenConfig);
-  //     console.log("GET response:", response.data);
+      let response = await axios.request(tokenConfig);
+      console.log("GET response:", response.data);
 
-  //     expect(response.data.data.OTMACON).toBe(otmaconValue);
-  //   } catch (error) {
-  //     console.log("An error occurred while reading OTMACON:", error);
-  //     const response = error?.status || error.message;
-  //     expect(response).toBe(200);
-  //   }
-  // });
+      expect(response.data.data.OTMACON).toBe(otmaconValue);
+    } catch (error) {
+      console.log("An error occurred while reading OTMACON:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+  });
 
-  // it('UR(6.2) - should update TRACSTR parameter to YES/NO', async () => {
-  //   let tracstrValue = getRandomYesOrNo();
+  it('UR(6.2) - should update TRACSTR parameter to YES/NO', async () => {
+    let tracstrValue = getRandomYesOrNo();
 
-  //   let tokenConfig = {
-  //     timeout: 10000,
-  //     maxBodyLength: Infinity,
-  //     url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
-  //     headers: {
-  //       'Cookie': ltpaToken2,
-  //     },
-  //   };
+    let tokenConfig = {
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      headers: {
+        'Cookie': ltpaToken2,
+      },
+    };
 
-  //   try {
-  //     tokenConfig.method = 'put';
-  //     tokenConfig.data = {
-  //       "sysParms": {
-  //         "TRACSTR": tracstrValue,
-  //       },
-  //     };
+    try {
+      tokenConfig.method = 'put';
+      tokenConfig.data = {
+        "TRACSTR": tracstrValue,
+      };
 
-  //     let response = await axios.request(tokenConfig);
-  //     console.log("PUT response:", response.data);
+      let response = await axios.request(tokenConfig);
+      console.log("PUT response:", response.data);
 
-  //     await new Promise(resolve => setTimeout(resolve, 500));
-  //   } catch (error) {
-  //     console.log("An error occurred while updating TRACSTR:", error);
-  //     const response = error?.status || error.message;
-  //     expect(response).toBe(200);
-  //   }
+      await new Promise(resolve => setTimeout(resolve, 500));
+    } catch (error) {
+      console.log("An error occurred while updating TRACSTR:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
 
-  //   try {
-  //     tokenConfig.method = 'get';
-  //     tokenConfig.data = {
-  //       "sysParms": "TRACSTR",
-  //     };
+    try {
+      tokenConfig.method = 'get';
+      tokenConfig.data = {
+        "sysParms": "TRACSTR",
+      };
 
-  //     let response = await axios.request(tokenConfig);
-  //     console.log("GET response:", response.data);
+      let response = await axios.request(tokenConfig);
+      console.log("GET response:", response.data);
 
-  //     expect(response.data.data.TRACSTR).toBe(tracstrValue);
-  //   } catch (error) {
-  //     console.log("An error occurred while reading TRACSTR:", error);
-  //     const response = error?.status || error.message;
-  //     expect(response).toBe(200);
-  //   }
-  // });
+      expect(response.data.data.TRACSTR).toBe(tracstrValue);
+    } catch (error) {
+      console.log("An error occurred while reading TRACSTR:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+  });
 
-  // it('UR(6.2) - should update EXITLIM parameter to 0-30 int', async () => {
-  //   let exitlimValue = getRandomInt(1, 30);
+  it('UR(6.2) - should update EXITLIM parameter to 0-30 int', async () => {
+    let exitlimValue = getRandomInt(1, 30);
 
-  //   let tokenConfig = {
-  //     timeout: 10000,
-  //     maxBodyLength: Infinity,
-  //     url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
-  //     headers: {
-  //       'Cookie': ltpaToken2,
-  //     },
-  //   };
+    let tokenConfig = {
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm-sysparms?qmName=" + testQueueManager,
+      headers: {
+        'Cookie': ltpaToken2,
+      },
+    };
 
-  //   try {
-  //     tokenConfig.method = 'put';
-  //     tokenConfig.data = {
-  //       "sysParms": {
-  //         "EXITLIM": exitlimValue.toString(),
-  //       },
-  //     };
+    try {
+      tokenConfig.method = 'put';
+      tokenConfig.data = {
+        "EXITLIM": exitlimValue.toString(),
+      };
 
-  //     let response = await axios.request(tokenConfig);
-  //     console.log("PUT response:", response.data);
+      let response = await axios.request(tokenConfig);
+      console.log("PUT response:", response.data);
 
-  //     await new Promise(resolve => setTimeout(resolve, 500));
-  //   } catch (error) {
-  //     console.log("An error occurred while updating EXITLIM:", error);
-  //     const response = error?.status || error.message;
-  //     expect(response).toBe(200);
-  //   }
+      await new Promise(resolve => setTimeout(resolve, 500));
+    } catch (error) {
+      console.log("An error occurred while updating EXITLIM:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
 
-  //   try {
-  //     tokenConfig.method = 'get';
-  //     tokenConfig.data = {
-  //       "sysParms": "EXITLIM",
-  //     };
+    try {
+      tokenConfig.method = 'get';
+      tokenConfig.data = {
+        "sysParms": "EXITLIM",
+      };
 
-  //     let response = await axios.request(tokenConfig);
-  //     console.log("GET response:", response.data);
+      let response = await axios.request(tokenConfig);
+      console.log("GET response:", response.data);
 
-  //     expect(response.data.data.EXITLIM).toBe(exitlimValue.toString());
-  //   } catch (error) {
-  //     console.log("An error occurred while reading EXITLIM:", error);
-  //     const response = error?.status || error.message;
-  //     expect(response).toBe(200);
-  //   }
-  // });
+      expect(response.data.data.EXITLIM).toBe(exitlimValue.toString());
+    } catch (error) {
+      console.log("An error occurred while reading EXITLIM:", error);
+      const response = error?.status || error.message;
+      expect(response).toBe(200);
+    }
+  });
 
 });
 
