@@ -2,7 +2,7 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-const { readSysParms, zosmfRequest, editSysParms } = require('./zosmf-mq-services');
+const { readSysParms, zosmfRequest, editSysParms } = require('./app/zosmf-mq-services');
 const app = express();
 const https = require('https');
 const path = require('path');
