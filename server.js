@@ -8,6 +8,9 @@ const https = require('https');
 const path = require('path');
 const fs = require('fs');
 
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
 const PORT = 3000;
 const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
 
@@ -406,6 +409,105 @@ app.get('/qm/sysparms/download', async (req, res) => {
       });
     }
   });
+});
+
+/**
+ * @swagger
+ * /qm/sysparms/upload:
+ *   post:
+ *     summary: Upload system parameters for a queue manager
+ *     description: Upload a JSON file containing system parameters for a specified queue manager. A mandatory query parameter `qmName` must be provided to specify the queue manager. The request must include an LtpaToken2 cookie for authentication.
+ *     parameters:
+ *       - in: query
+ *         name: qmName
+ *         description: The name of the queue manager.
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: cookie
+ *         name: LtpaToken2
+ *         description: LtpaToken2 for authentication.
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       description: A JSON file containing system parameters to upload.
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               sysParms:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: System parameters uploaded successfully
+ */
+app.post('/qm/sysparms/upload', upload.single('sysParms'), async (req, res) => {
+  console.log("POST /qm/sysparms/upload endpoint was called");
+
+  // Check if the request is missing queue manager name
+  if (!req.query.qmName) {
+    // Return 400 since queue manager name is missing
+    return res.status(400).send({
+      'status': 400,
+      'statusText': 'Mandatory parameter qmName is missing',
+      'data': 'The request failed because the mandatory qmName field was missing from parameters. Please try again and provide a valid qmName field'
+    });
+  }
+
+  // Check if the request is missing an LtpaToken2
+  if (!req.cookies.LtpaToken2) {
+    // Return 400 since queue manager name is missing
+    return res.status(400).send({
+      'status': 400,
+      'statusText': 'Mandatory request header LtpaToken2 is missing',
+      'data': 'The request failed because request header did not include an LtpaToken2 token. Please try again and provide a valid LtpaToken2. If you do not have an LtpaToken2 yet, us the /authenticate endpoint to get one'
+    });
+  }
+
+  // Check if the request body contains a file
+  if (!req.file) {
+    return res.status(400).send({
+      'status': 400,
+      'statusText': 'Mandatory request body file is missing',
+      'data': 'The request failed because the mandatory file field was missing from the request body. Please try again and provide a valid file field'
+    });
+  } else {
+    console.log("File uploaded successfully: ", req.file.originalname);
+  }
+
+  // Read the uploaded JSON file contents into an object
+  let jsonData;
+  try {
+    const filePath = path.join(__dirname, 'uploads', req.file.filename);
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    jsonData = JSON.parse(fileContents);
+  } catch (error) {
+    console.error('Error reading or parsing file:', error);
+    return res.status(500).send('Error occurred while processing the file.');
+  }
+
+  // Call the editSysParms function to update the system parameters
+  const response = await editSysParms(req.query.qmName, req.cookies.LtpaToken2, jsonData.data);
+
+  // Check the response status and send the appropriate response
+
+  // Send the response
+  if (response.status == 204) {
+    res.status(200).send({
+      status: 200,
+      statusText: "JCL updated successfully",
+    });
+  } else {
+    res.send({
+      'status': response.status,
+      'statusText': "JCL updated successfully",
+      'data': response.data
+    });
+  }
 });
 
 app.listen(PORT, (error) =>{
