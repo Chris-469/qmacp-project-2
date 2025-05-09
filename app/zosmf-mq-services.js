@@ -69,7 +69,6 @@ async function readSysParms(qmName, ltpaToken, requestBody) {
         // Add the parameter to the return value
         returnParameters[allSystemParameters[key]] = value;
       });
-
     }
     else
     {
