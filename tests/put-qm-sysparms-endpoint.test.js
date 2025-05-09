@@ -130,7 +130,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
 
     let response = await axios.request(tokenConfig);
 
-    await new Promise(resolve => setTimeout(resolve, 500));
   } catch (error) {
     console.log("An error occurred while updating TWOARCH:", error);
     const response = error?.status || error.message;
@@ -173,7 +172,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
 
       let response = await axios.request(tokenConfig);
 
-      await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
       console.log("An error occurred while updating ARCWRTC:", error);
       const response = error?.status || error.message;
@@ -216,7 +214,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
 
       let response = await axios.request(tokenConfig);
 
-      await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
       console.log("An error occurred while updating OTMACON:", error);
       const response = error?.status || error.message;
@@ -259,7 +256,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
 
       let response = await axios.request(tokenConfig);
 
-      await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
       console.log("An error occurred while updating TRACSTR:", error);
       const response = error?.status || error.message;
@@ -302,7 +298,6 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
 
       let response = await axios.request(tokenConfig);
 
-      await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
       console.log("An error occurred while updating EXITLIM:", error);
       const response = error?.status || error.message;
