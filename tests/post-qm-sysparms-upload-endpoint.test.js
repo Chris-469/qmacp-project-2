@@ -37,7 +37,7 @@ describe('UR(9) - Users must be able to use a previously saved file to restore s
 
        expect(response.status).toBe(200);
     } catch(error) {
-      //  console.log("An error occurred in testing: " + error?.status || error.message);
+       console.log("An error occurred in testing: " + error?.status || error.message);
        const response = error?.status || error.message;
 
        expect(response).toBe(200);
