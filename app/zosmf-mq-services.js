@@ -37,7 +37,7 @@ async function readSysParms(qmName, qmVersion, ltpaToken, requestBody) {
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V' + qmVersion + '.SCSQPROC(CSQ4ZPRM)',
+      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V' + qmVersion + '.SCSQPROC(CSQ4RPRM)',
       headers: {
         'Cookie': 'LtpaToken2=' + ltpaToken
       },
@@ -120,10 +120,11 @@ async function readSysParms(qmName, qmVersion, ltpaToken, requestBody) {
  * Edit a parameter in CSQ4RPRM.
  * @param {string} sysParm - The system parameter to edited and its new value.
  * @param {string} qmName - The queue manager name.
+ * @param {string} qmVersion - The version of the queue manager.
  * @param {string} ltpaToken - The LTPA token.
  * @returns {Promise<string>} The value of the parameter.
  */
-async function editSysParms(qmName, ltpaToken, requestBody) {
+async function editSysParms(qmName, qmVersion, ltpaToken, requestBody) {
 
   // get the whole CSQ4RPRM dataset for this queue manager
   try {
@@ -132,7 +133,7 @@ async function editSysParms(qmName, ltpaToken, requestBody) {
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4RPRM)',
+      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V' + qmVersion + '.SCSQPROC(CSQ4RPRM)',
       headers: {
         'Cookie': 'LtpaToken2=' + ltpaToken
       },

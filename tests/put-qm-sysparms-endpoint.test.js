@@ -8,6 +8,7 @@ const PORT = 3000;
 
 const serverURL = "http://9.20.194.48:3000/"
 const testQueueManager = "MQ1A";
+let testVersion = "9XX";
 
 const validCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
 const invalidCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
@@ -65,7 +66,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
     let tokenConfig = {
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         'Cookie' : ltpaToken2
         },
@@ -83,7 +84,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
       response = await axios.request(tokenConfig);
 
     } catch(error) {
-      console.log("An error occurred while updating the parameter in testing: " + error);
+      console.log("An error occurred while updating the parameter in testing: " + error.data);
       const response = error?.status || error.message;
 
       expect(response).toBe(200);
@@ -102,7 +103,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
       expect(response.data.data.INBUFF).toBe(inbuffValue.toString());
     }
     catch (error) {
-      console.log("An error occurred while reading the parameter in testing: " + error);
+      console.log("An error occurred while reading the parameter in testing: " + error.data);
       const response = error?.status || error.message;
 
       expect(response).toBe(200);
@@ -116,7 +117,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
   let tokenConfig = {
     timeout: 10000,
     maxBodyLength: Infinity,
-    url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
+    url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
     headers: {
       'Cookie': ltpaToken2,
     },
@@ -131,7 +132,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
     let response = await axios.request(tokenConfig);
 
   } catch (error) {
-    console.log("An error occurred while updating TWOARCH:", error);
+    console.log("An error occurred while updating TWOARCH:", error.data);
     const response = error?.status || error.message;
     expect(response).toBe(200);
   }
@@ -146,7 +147,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
 
     expect(response.data.data.TWOARCH).toBe(twoarchValue);
   } catch (error) {
-    console.log("An error occurred while reading TWOARCH:", error);
+    console.log("An error occurred while reading TWOARCH:", error.data);
     const response = error?.status || error.message;
     expect(response).toBe(200);
   }
@@ -158,7 +159,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
     let tokenConfig = {
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         'Cookie': ltpaToken2,
       },
@@ -173,7 +174,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
       let response = await axios.request(tokenConfig);
 
     } catch (error) {
-      console.log("An error occurred while updating ARCWRTC:", error);
+      console.log("An error occurred while updating ARCWRTC:", error.data);
       const response = error?.status || error.message;
       expect(response).toBe(200);
     }
@@ -188,7 +189,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
 
       expect(response.data.data.ARCWRTC).toBe(arcwrtcValue);
     } catch (error) {
-      console.log("An error occurred while reading ARCWRTC:", error);
+      console.log("An error occurred while reading ARCWRTC:", error.data);
       const response = error?.status || error.message;
       expect(response).toBe(200);
     }
@@ -200,7 +201,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
     let tokenConfig = {
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         'Cookie': ltpaToken2,
       },
@@ -215,7 +216,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
       let response = await axios.request(tokenConfig);
 
     } catch (error) {
-      console.log("An error occurred while updating OTMACON:", error);
+      console.log("An error occurred while updating OTMACON:", error.data);
       const response = error?.status || error.message;
       expect(response).toBe(200);
     }
@@ -230,7 +231,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
 
       expect(response.data.data.OTMACON).toBe(otmaconValue);
     } catch (error) {
-      console.log("An error occurred while reading OTMACON:", error);
+      console.log("An error occurred while reading OTMACON:", error.data);
       const response = error?.status || error.message;
       expect(response).toBe(200);
     }
@@ -242,7 +243,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
     let tokenConfig = {
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         'Cookie': ltpaToken2,
       },
@@ -257,7 +258,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
       let response = await axios.request(tokenConfig);
 
     } catch (error) {
-      console.log("An error occurred while updating TRACSTR:", error);
+      console.log("An error occurred while updating TRACSTR:", error.data);
       const response = error?.status || error.message;
       expect(response).toBe(200);
     }
@@ -272,7 +273,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
 
       expect(response.data.data.TRACSTR).toBe(tracstrValue);
     } catch (error) {
-      console.log("An error occurred while reading TRACSTR:", error);
+      console.log("An error occurred while reading TRACSTR:", error.data);
       const response = error?.status || error.message;
       expect(response).toBe(200);
     }
@@ -284,7 +285,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
     let tokenConfig = {
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         'Cookie': ltpaToken2,
       },
@@ -299,7 +300,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
       let response = await axios.request(tokenConfig);
 
     } catch (error) {
-      console.log("An error occurred while updating EXITLIM:", error);
+      console.log("An error occurred while updating EXITLIM:", error.data);
       const response = error?.status || error.message;
       expect(response).toBe(200);
     }
@@ -314,7 +315,7 @@ describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms
 
       expect(response.data.data.EXITLIM).toBe(exitlimValue.toString());
     } catch (error) {
-      console.log("An error occurred while reading EXITLIM:", error);
+      console.log("An error occurred while reading EXITLIM:", error.data);
       const response = error?.status || error.message;
       expect(response).toBe(200);
     }

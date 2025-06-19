@@ -269,6 +269,12 @@ app.get('/qm/sysparms', async (req, res)=>{
  *         required: true
  *         schema:
  *           type: string
+*       - in: query
+ *         name: qmVersion
+ *         description: The version of the queue manager.
+ *         required: true
+ *         schema:
+ *           type: string
  *       - in: cookie
  *         name: LtpaToken2
  *         description: LtpaToken2 for authentication.
@@ -324,6 +330,16 @@ app.put('/qm/sysparms', async (req, res)=>{
 
   }
 
+  // Check if the request is missing qm version
+  if (!req.query.qmVersion) {
+    // Return 400 since qm version is missing
+    return res.status(400).send({
+      'status': 400,
+      'statusText': 'Mandatory parameter qmVersion is missing',
+      'data': 'The request failed because the mandatory field qmVersion was missing from parameters. Please try again and provide a valid qmVersion'
+    });
+  }
+
   // Check if the request is missing an LtpaToken2
   if (!req.cookies.LtpaToken2) {
     // Return 400 since queue manager name is missing
@@ -335,7 +351,7 @@ app.put('/qm/sysparms', async (req, res)=>{
   }
 
   // Pass the relevant fields to the editSysParms function and wait for the response
-  const response = await editSysParms(req.query.qmName, req.cookies.LtpaToken2, req.body);
+  const response = await editSysParms(req.query.qmName, req.query.qmVersion, req.cookies.LtpaToken2, req.body);
 
   // Send the response
   if (response.status == 204) {
