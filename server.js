@@ -144,6 +144,12 @@ app.post('/authenticate', async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
+ *       - in: query
+ *         name: qmVersion
+ *         description: Version of the queue manager.
+ *         required: true
+ *         schema:
+ *           type: string
  *       - in: cookie
  *         name: LtpaToken2
  *         description: LtpaToken2 for authentication.
@@ -183,7 +189,7 @@ app.post('/authenticate', async (req, res) => {
  *                   example:
  *                     INBUFF: "60"
  *       400:
- *         description: Mandatory parameter qmName or LtpaToken2 is missing
+ *         description: Mandatory parameter qmName, qmVersion or LtpaToken2 is missing
  *       401:
  *         description: Credentials invalid
  *       500:
@@ -204,9 +210,19 @@ app.get('/qm/sysparms', async (req, res)=>{
     });
   }
 
+  // Check if the request is missing qm version
+  if (!req.query.qmVersion) {
+    // Return 400 since qm version is missing
+    return res.status(400).send({
+      'status': 400,
+      'statusText': 'Mandatory parameter qmVersion is missing',
+      'data': 'The request failed because the mandatory field qmVersion was missing from parameters. Please try again and provide a valid qmVersion'
+    });
+  }
+
   // Check if the request is missing an LtpaToken2
   if (!req.cookies.LtpaToken2) {
-    // Return 400 since queue manager name is missing
+    // Return 400 since auth token is missing
     return res.status(400).send({
       'status': 400,
       'statusText': 'Mandatory request header LtpaToken2 is missing',
@@ -217,15 +233,27 @@ app.get('/qm/sysparms', async (req, res)=>{
   console.log("Request body: ", req.body);
 
   // Pass the relevant fields to the readSysParm function and wait for the response
-  const response = await readSysParms(req.query.qmName, req.cookies.LtpaToken2, req.body.sysParms);
+  const response = await readSysParms(req.query.qmName, req.query.qmVersion, req.cookies.LtpaToken2, req.body.sysParms);
 
   // Send the response
   res.status(response.status);
-  res.send({
-    'status': response.status,
-    'statusText': response.statusText,
-    'data': response.data
-  });
+  if(response.status == 200) {
+    res.send({
+        'status': response.status,
+        'statusText': response.statusText,
+        'qmName': response.qmName,
+        'qmVersion': response.qmVersion,
+        'data': response.data
+    });
+  }
+  else {
+    res.send({
+        'status': response.status,
+        'statusText': response.statusText,
+        'data': response.data
+    });
+  }
+  
 });
 
 /**

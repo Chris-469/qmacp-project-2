@@ -15,10 +15,11 @@ const httpsAgent = new https.Agent({
  * Read one or more system parameters from CSQ4RPRM.
  * @param {string} sysParm - The system parameter to read.
  * @param {string} qmName - The queue manager name.
+ * @param {string} qmVersion - The version of the queue manager.
  * @param {string} ltpaToken - The LTTP token.
  * @returns {Promise<string>} The value of the parameter.
  */
-async function readSysParms(qmName, ltpaToken, requestBody) {
+async function readSysParms(qmName, qmVersion, ltpaToken, requestBody) {
   // Extract the queue manager name from the request body
   let returnParameters = {};
 
@@ -36,7 +37,7 @@ async function readSysParms(qmName, ltpaToken, requestBody) {
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4RPRM)',
+      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V' + qmVersion + '.SCSQPROC(CSQ4ZPRM)',
       headers: {
         'Cookie': 'LtpaToken2=' + ltpaToken
       },
@@ -50,6 +51,12 @@ async function readSysParms(qmName, ltpaToken, requestBody) {
     if (zosmfResponse.status != 200) {
       return zosmfResponse;
     }
+
+    // Extract the version number from the first line containing "SYSLIB"
+    const syslibVersion = extractSyslibVersion(zosmfResponse.data);
+
+    // Extract the queue manager name from the first line
+    const returnedQmName = extractQmName(zosmfResponse.data);
 
     // Parse the system parameters from the csq4zprm file
     if(requestBody == 'ALL') {
@@ -92,6 +99,8 @@ async function readSysParms(qmName, ltpaToken, requestBody) {
     return {
       status: 200,
       statusText: 'Request successful',
+      qmName: returnedQmName,
+      qmVersion: syslibVersion,
       data: returnParameters
     }
   } catch(error) {
@@ -342,6 +351,43 @@ async function zosmfRequest(config) {
         statusText: error.response?.statusText || 'Internal Server Error',
         data: error.response?.data || error.message
       };
+  }
+}
+
+/**
+ * Extracts the version number from the first line containing "SYSLIB" in the input string.
+ * Supports versions like "V910" and "V9XX".
+ * @param {string} data - The input string to search.
+ * @returns {string|null} The extracted version number, or null if not found.
+ */
+function extractSyslibVersion(data) {
+  const lines = data.split('\n');
+  for (const line of lines) {
+    if (line.includes('SYSLIB')) {
+      // Match V followed by 3 alphanumeric characters (e.g., V910, V9XX)
+      const match = line.match(/\.V([A-Z0-9]{3})/i);
+      if (match) {
+        return match[1];
+      }
+      break; // Stop after the first SYSLIB line
+    }
+  }
+}
+
+/**
+ * Extracts the queue manager name from the first line of the input string.
+ * For example, if the line is "//MQ1AZPRM JOB", it returns "MQ1A".
+ * @param {string} data - The input string to search.
+ * @returns {string|null} The extracted queue manager name, or null if not found.
+ */
+function extractQmName(data) {
+  const lines = data.split('\n');
+  if (lines.length === 0) return null;
+  const firstLine = lines[0].trim();
+  // Match // followed by 4 uppercase letters/digits, then any characters, then ' JOB'
+  const match = firstLine.match(/^\/\/([A-Z0-9]{4})[A-Z0-9]*\s+JOB/i);
+  if (match) {
+    return match[1];
   }
 }
 

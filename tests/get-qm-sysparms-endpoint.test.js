@@ -8,6 +8,7 @@ const PORT = 3000;
 
 const serverURL = "http://9.20.194.48:3000/"
 const testQueueManager = "MQ1A";
+let testVersion = "9XX";
 
 const validCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
 const invalidCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
@@ -63,7 +64,7 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         'Cookie' : ltpaToken2
         },
@@ -96,7 +97,7 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         'Cookie' : ltpaToken2
         }
@@ -127,7 +128,7 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         'Cookie' : ltpaToken2
         },
@@ -162,7 +163,7 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         'Cookie' : ltpaToken2
         },
@@ -186,6 +187,130 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
       expect(keys[1]).toBe("QSGDATA");
       expect(keys[2]).toBe("MAXRTU");
       expect(keys[3]).toBe("DEALLCT");
+      }
+      catch (error) {
+        console.log("An error occurred while reading the parameter in testing: " + error);
+        const response = error?.status || error.message;
+  
+        expect(response).toBe(200);
+      }
+  });
+
+  it('UR(XX) - requesting params of certain qm returned CSQ4ZPRM of that qm', async () => {
+
+    // build the body basic config for the requests
+    let testQmName = "MQ1A";
+    let config = {
+      method: 'get',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm/sysparms?qmName=" + testQmName + "&qmVersion=" + testVersion,
+      headers: {
+        'Cookie' : ltpaToken2
+        }
+    }
+
+    try {
+      let response;
+
+      // send the request to update the parameter
+      response = await axios.request(config);
+
+      expect(response.status).toBe(200);
+      expect(response.data.qmName).toBe(testQmName);
+      }
+      catch (error) {
+        console.log("An error occurred while reading the parameter in testing: " + error);
+        const response = error?.status || error.message;
+  
+        expect(response).toBe(200);
+      }
+  });
+
+  it('UR(XX) - requesting version 910 returns params for version 910', async () => {
+
+    // build the body basic config for the requests
+    testVersion = "910";
+    let config = {
+      method: 'get',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
+      headers: {
+        'Cookie' : ltpaToken2
+        }
+    }
+
+    try {
+      let response;
+
+      // send the request to update the parameter
+      response = await axios.request(config);
+
+      expect(response.status).toBe(200);
+      expect(response.data.qmVersion).toBe("910");
+      }
+      catch (error) {
+        console.log("An error occurred while reading the parameter in testing: " + error);
+        const response = error?.status || error.message;
+  
+        expect(response).toBe(200);
+      }
+  });
+
+  it('UR(XX) - requesting version 920 returns params for version 920', async () => {
+
+    // build the body basic config for the requests
+    testVersion = "920";
+    let config = {
+      method: 'get',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
+      headers: {
+        'Cookie' : ltpaToken2
+        }
+    }
+
+    try {
+      let response;
+
+      // send the request to update the parameter
+      response = await axios.request(config);
+
+      expect(response.status).toBe(200);
+      expect(response.data.qmVersion).toBe("920");
+      }
+      catch (error) {
+        console.log("An error occurred while reading the parameter in testing: " + error);
+        const response = error?.status || error.message;
+  
+        expect(response).toBe(200);
+      }
+  });
+
+  it('UR(XX) - requesting version 9XX returns params for version 9XX', async () => {
+
+    // build the body basic config for the requests
+    testVersion = "9XX";
+    let config = {
+      method: 'get',
+      timeout: 10000,
+      maxBodyLength: Infinity,
+      url: serverURL + "qm/sysparms?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
+      headers: {
+        'Cookie' : ltpaToken2
+        }
+    }
+
+    try {
+      let response;
+
+      // send the request to update the parameter
+      response = await axios.request(config);
+
+      expect(response.status).toBe(200);
+      expect(response.data.qmVersion).toBe("9XX");
       }
       catch (error) {
         console.log("An error occurred while reading the parameter in testing: " + error);
