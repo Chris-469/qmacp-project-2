@@ -248,7 +248,7 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
       response = await axios.request(config);
 
       expect(response.status).toBe(200);
-      expect(response.data.qmVersion).toBe("910");
+      expect(response.data.qmVersion).toBe(testVersion);
       }
       catch (error) {
         console.log("An error occurred while reading the parameter in testing: " + error);
@@ -279,7 +279,7 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
       response = await axios.request(config);
 
       expect(response.status).toBe(200);
-      expect(response.data.qmVersion).toBe("920");
+      expect(response.data.qmVersion).toBe(testVersion);
       }
       catch (error) {
         console.log("An error occurred while reading the parameter in testing: " + error);

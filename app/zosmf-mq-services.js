@@ -37,7 +37,7 @@ async function readSysParms(qmName, qmVersion, ltpaToken, requestBody) {
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V' + qmVersion + '.SCSQPROC(CSQ4RPRM)',
+      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V' + qmVersion + '.SCSQPROC(CSQ4ZPRM)',
       headers: {
         'Cookie': 'LtpaToken2=' + ltpaToken
       },
