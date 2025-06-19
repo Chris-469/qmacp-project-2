@@ -381,6 +381,12 @@ app.put('/qm/sysparms', async (req, res)=>{
  *         required: true
  *         schema:
  *           type: string
+ *       - in: query
+ *         name: qmVersion
+ *         description: The version of the queue manager.
+ *         required: true
+ *         schema:
+ *           type: string
  *       - in: cookie
  *         name: LtpaToken2
  *         description: LtpaToken2 for authentication.
@@ -391,7 +397,7 @@ app.put('/qm/sysparms', async (req, res)=>{
  *       200:
  *         description: System parameters downloaded successfully
  *       400:
- *         description: Mandatory parameter qmName or LtpaToken2 is missing
+ *         description: Mandatory parameter qmName, qmVersion or LtpaToken2 is missing
  *       401:
  *         description: Credentials invalid
  *       500:
@@ -422,7 +428,7 @@ app.get('/qm/sysparms/download', async (req, res) => {
   }
 
   // Pass the relevant fields to the readSysParm function and wait for the response
-  const response = await readSysParms(req.query.qmName, req.cookies.LtpaToken2, req.body.sysParms);
+  const response = await readSysParms(req.query.qmName, req.query.qmVersion, req.cookies.LtpaToken2, req.body.sysParms);
 
   // Create the JSON file to be downloaded
   const uniqueFileName = `sysparms-${req.query.qmName}-${Date.now()}.json`;
@@ -468,6 +474,12 @@ app.get('/qm/sysparms/download', async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
+ *       - in: query
+ *         name: qmVersion
+ *         description: The version of the queue manager.
+ *         required: true
+ *         schema:
+ *           type: string
  *       - in: cookie
  *         name: LtpaToken2
  *         description: LtpaToken2 for authentication.
@@ -499,6 +511,15 @@ app.post('/qm/sysparms/upload', upload.single('sysParms'), async (req, res) => {
       'status': 400,
       'statusText': 'Mandatory parameter qmName is missing',
       'data': 'The request failed because the mandatory qmName field was missing from parameters. Please try again and provide a valid qmName field'
+    });
+  }
+
+  // Check if the request is missing qm version
+  if (!req.query.qmVersion) {
+    return res.status(400).send({
+      'status': 400,
+      'statusText': 'Mandatory parameter qmVersion is missing',
+      'data': 'The request failed because the mandatory field qmVersion was missing from parameters. Please try again and provide a valid qmVersion'
     });
   }
 
@@ -535,7 +556,7 @@ app.post('/qm/sysparms/upload', upload.single('sysParms'), async (req, res) => {
   }
 
   // Call the editSysParms function to update the system parameters
-  const response = await editSysParms(req.query.qmName, req.cookies.LtpaToken2, jsonData.data);
+  const response = await editSysParms(req.query.qmName, req.query.qmVersion, req.cookies.LtpaToken2, jsonData.data);
 
   // Check the response status and send the appropriate response
 
