@@ -5,6 +5,7 @@ const express = require('express');
 
 const serverURL = "http://9.20.194.48:3005/"
 const testQueueManager = "MQNL";
+let testVersion = "9XX";
 
 const validCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
 let ltpaToken2 = false;
@@ -59,7 +60,7 @@ describe('UR(7) - Sending a GET request to /qm/sysparm/download results in respo
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms/download?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms/download?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         'Cookie' : ltpaToken2
         },
@@ -86,7 +87,7 @@ describe('UR(7) - Sending a GET request to /qm/sysparm/download results in respo
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms/download",
+      url: serverURL + "qm/sysparms/download?qmVersion=" + testVersion,
       headers: {
         'Cookie' : ltpaToken2
         },
@@ -113,7 +114,7 @@ describe('UR(7) - Sending a GET request to /qm/sysparm/download results in respo
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms/download?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms/download?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         },
     }
@@ -139,7 +140,7 @@ describe('UR(7) - Sending a GET request to /qm/sysparm/download results in respo
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms/download?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms/download?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         },
     }
@@ -165,7 +166,7 @@ describe('UR(7) - Sending a GET request to /qm/sysparm/download results in respo
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms/download?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms/download?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         },
     }
@@ -191,7 +192,7 @@ describe('UR(7) - Sending a GET request to /qm/sysparm/download results in respo
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms/download?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms/download?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         },
     }

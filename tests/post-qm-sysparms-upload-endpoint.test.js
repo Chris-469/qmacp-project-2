@@ -7,6 +7,7 @@ const express = require('express');
 // const serverURL = "http://9.20.194.48:3005/"
 const serverURL = "http://localhost:3005/"
 const testQueueManager = "MQNL";
+let testVersion = "9XX";
 
 const validCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
 let ltpaToken2 = false;
@@ -60,7 +61,7 @@ describe('UR(9) - Users must be able to use a previously saved file to restore s
       method: 'post',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: serverURL + "qm/sysparms/upload?qmName=" + testQueueManager,
+      url: serverURL + "qm/sysparms/upload?qmName=" + testQueueManager + "&qmVersion=" + testVersion,
       headers: {
         'Cookie' : ltpaToken2,
         ...data.getHeaders()
