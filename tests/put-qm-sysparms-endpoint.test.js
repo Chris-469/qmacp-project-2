@@ -4,9 +4,9 @@ const fs = require('fs');
 const { editJclLine, editJCL } = require('../app/zosmf-mq-services');
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const PORT = 3005;
 
-const serverURL = "http://9.20.194.48:3000/"
+const serverURL = "http://9.20.194.48:3005/"
 const testQueueManager = "MQNL";
 let testVersion = "9XX";
 

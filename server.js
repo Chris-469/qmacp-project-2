@@ -11,7 +11,7 @@ const fs = require('fs');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
-const PORT = 3000;
+const PORT = 3005;
 const zosmfURL = "https://winmvs3c.hursley.ibm.com:32070/zosmf/"
 
 // Create an HTTPS agent with rejectUnauthorized set to false
@@ -556,7 +556,7 @@ app.post('/qm/sysparms/upload', upload.single('sysParms'), async (req, res) => {
 
 app.listen(PORT, (error) =>{
     if(!error)
-        console.log("Server running + available at http://localhost:3000 ")
+        console.log("Server running + available at http://localhost:3005 ")
     else
         console.log("Error occurred, server can't start", error);
     }

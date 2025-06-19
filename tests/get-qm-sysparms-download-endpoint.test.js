@@ -3,7 +3,7 @@ const axios = require('axios');
 const fs = require('fs');
 const express = require('express');
 
-const serverURL = "http://9.20.194.48:3000/"
+const serverURL = "http://9.20.194.48:3005/"
 const testQueueManager = "MQNL";
 
 const validCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";

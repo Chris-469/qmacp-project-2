@@ -47,4 +47,4 @@ function replaceInFiles(dir, target, replacement) {
 
 // Start the replacement process in the current directory
 const currentDir = __dirname;
-replaceInFiles(currentDir, 'MQNL', 'MQNL');
+replaceInFiles(currentDir, '3005', '3005');
