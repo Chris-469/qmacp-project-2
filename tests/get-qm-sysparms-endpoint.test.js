@@ -7,7 +7,7 @@ const app = express();
 const PORT = 3000;
 
 const serverURL = "http://9.20.194.48:3000/"
-const testQueueManager = "MQ1A";
+const testQueueManager = "MQNL";
 let testVersion = "9XX";
 
 const validCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
@@ -199,7 +199,7 @@ describe('UR(4) - Users must be able to retrieve the current system parameters o
   it('UR(XX) - requesting params of certain qm returned CSQ4ZPRM of that qm', async () => {
 
     // build the body basic config for the requests
-    let testQmName = "MQ1A";
+    let testQmName = "MQNL";
     let config = {
       method: 'get',
       timeout: 10000,

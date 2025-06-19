@@ -7,7 +7,7 @@ const app = express();
 const PORT = 3000;
 
 const serverURL = "http://9.20.194.48:3000/"
-const testQueueManager = "MQ1A";
+const testQueueManager = "MQNL";
 let testVersion = "9XX";
 
 const validCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
@@ -611,7 +611,7 @@ describe('The editJclLine function should edit the value of any given parameter'
   });
 });
 
-describe('The editJcl parameter should return a correctly edited CSQ4RPRM', () => {
+describe('The editJcl parameter should return a correctly edited CSQ4ZPRM', () => {
   let jclContent;
 
   beforeAll(() => {

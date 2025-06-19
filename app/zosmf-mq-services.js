@@ -12,7 +12,7 @@ const httpsAgent = new https.Agent({
 
 // Assisted by watsonx Code Assistant
 /**
- * Read one or more system parameters from CSQ4RPRM.
+ * Read one or more system parameters from CSQ4ZPRM.
  * @param {string} sysParm - The system parameter to read.
  * @param {string} qmName - The queue manager name.
  * @param {string} qmVersion - The version of the queue manager.
@@ -30,7 +30,7 @@ async function readSysParms(qmName, qmVersion, ltpaToken, requestBody) {
     requestBody = 'ALL';
   }
 
-  // get the CSQ4RPRM dataset for this queue manager
+  // get the CSQ4ZPRM dataset for this queue manager
   try {
     // Build the request config
     let config = {
@@ -117,7 +117,7 @@ async function readSysParms(qmName, qmVersion, ltpaToken, requestBody) {
 }
 
 /**
- * Edit a parameter in CSQ4RPRM.
+ * Edit a parameter in CSQ4ZPRM.
  * @param {string} sysParm - The system parameter to edited and its new value.
  * @param {string} qmName - The queue manager name.
  * @param {string} qmVersion - The version of the queue manager.
@@ -126,14 +126,14 @@ async function readSysParms(qmName, qmVersion, ltpaToken, requestBody) {
  */
 async function editSysParms(qmName, qmVersion, ltpaToken, requestBody) {
 
-  // get the whole CSQ4RPRM dataset for this queue manager
+  // get the whole CSQ4ZPRM dataset for this queue manager
   try {
     // Build the request config
     let config = {
       method: 'get',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V' + qmVersion + '.SCSQPROC(CSQ4RPRM)',
+      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V' + qmVersion + '.SCSQPROC(CSQ4ZPRM)',
       headers: {
         'Cookie': 'LtpaToken2=' + ltpaToken
       },
@@ -151,12 +151,12 @@ async function editSysParms(qmName, qmVersion, ltpaToken, requestBody) {
     // Update the JCL with the new parameter value
     let updatedJCL = await editJCL(zosmfResponse.data, requestBody);
 
-    // Execute zOSMF request to update the dataset TODO update CSQ4RPRM to correct name when testing has finshed
+    // Execute zOSMF request to update the dataset TODO update CSQ4ZPRM to correct name when testing has finshed
     config = {
       method: 'put',
       timeout: 10000,
       maxBodyLength: Infinity,
-      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4RPRM)',
+      url: zosmfURL + 'restfiles/ds/' + 'VICY.' + qmName + '.V9XX.SCSQPROC(CSQ4ZPRM)',
       headers: {
         'Cookie': 'LtpaToken2=' + ltpaToken
       },
@@ -274,7 +274,7 @@ async function editJclLine(jclLine, sysParm, updateValue) {
 }
 
 /**
- * Extracts a single parameter from a CSQ4RPRM formatted JCL job.
+ * Extracts a single parameter from a CSQ4ZPRM formatted JCL job.
  * @param {string} jcl - The JCL string to search.
  * @param {string} sysParm - The parameter to extract.
  * @returns {string|null} The value of the parameter if found, or null if not found.
@@ -377,7 +377,7 @@ function extractSyslibVersion(data) {
 
 /**
  * Extracts the queue manager name from the first line of the input string.
- * For example, if the line is "//MQ1AZPRM JOB", it returns "MQ1A".
+ * For example, if the line is "//MQNLZPRM JOB", it returns "MQNL".
  * @param {string} data - The input string to search.
  * @returns {string|null} The extracted queue manager name, or null if not found.
  */

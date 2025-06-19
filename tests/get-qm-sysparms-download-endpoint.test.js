@@ -4,7 +4,7 @@ const fs = require('fs');
 const express = require('express');
 
 const serverURL = "http://9.20.194.48:3000/"
-const testQueueManager = "MQ1A";
+const testQueueManager = "MQNL";
 
 const validCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
 let ltpaToken2 = false;

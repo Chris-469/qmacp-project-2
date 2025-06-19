@@ -1,4 +1,4 @@
-﻿//MQ1AZPRM JOB
+﻿//MQNLZPRM JOB
 //******************************************************************
 //*                                                                *
 //* <copyright                                                     *
@@ -38,7 +38,7 @@
 //*                      with the high level qualifier of the
 //*                      SCSQMACS and SCSQAUTH target libraries.
 //*
-//*    Replace   VICY.MQ1A.LOADLIB
+//*    Replace   VICY.MQNL.LOADLIB
 //*                      with the data set name of the authorized
 //*                      load library in which to store your
 //*                      system parameter module.
@@ -181,7 +181,7 @@
 //      PARM='SIZE=(900K,124K),RENT,NCAL,LIST,AMODE=31,RMODE=ANY'
 //*
 //*   APF-authorized library for the new system parameter module
-//SYSLMOD  DD DSN=VICY.MQ1A.LOADLIB,DISP=SHR
+//SYSLMOD  DD DSN=VICY.MQNL.LOADLIB,DISP=SHR
 //*
 //SYSUT1   DD UNIT=SYSDA,DCB=BLKSIZE=1024,
 //            SPACE=(1024,(200,20))

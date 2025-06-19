@@ -6,7 +6,7 @@ const express = require('express');
 
 // const serverURL = "http://9.20.194.48:3000/"
 const serverURL = "http://localhost:3000/"
-const testQueueManager = "MQ1A";
+const testQueueManager = "MQNL";
 
 const validCredentials = "Basic Q0hSSVNDTzpVcmJhbkMwZDNEM3BsMHk0";
 let ltpaToken2 = false;
@@ -48,8 +48,8 @@ describe('UR(9) - Users must be able to use a previously saved file to restore s
     
     // Create the body of the request with the file
     let data = new FormData();  
-    const filePath = path.join(__dirname, 'sysparm-test-files', 'sysparms-MQ1A-1746717836886-invalid.json');
-    // const filePath = '/Users/chriscocklin/Downloads/sysparms-MQ1A-1746717836886.json';
+    const filePath = path.join(__dirname, 'sysparm-test-files', 'sysparms-MQNL-1746717836886-invalid.json');
+    // const filePath = '/Users/chriscocklin/Downloads/sysparms-MQNL-1746717836886.json';
     if (!fs.existsSync(filePath)) {
       throw new Error(`File not found: ${filePath}`);
     }
@@ -85,7 +85,7 @@ describe('UR(9) - Users must be able to use a previously saved file to restore s
   // it('POST request to the /qm/sysparm/upload with invalid file format returns response code 500', async () => {
   //   // Create the body of the request with the file
   //   let data = new FormData();  
-  //   const filePath = '/Users/chriscocklin/Downloads/sysparms-MQ1A-1746717836886.txt';
+  //   const filePath = '/Users/chriscocklin/Downloads/sysparms-MQNL-1746717836886.txt';
   //   if (!fs.existsSync(filePath)) {
   //     throw new Error(`File not found: ${filePath}`);
   //   }
