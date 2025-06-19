@@ -14,7 +14,7 @@ let ltpaToken2 = false;
 /**
  * Endpoint testing for POST /qm/sysparms/upload
 */
-describe('UR(8) - Users must be able to use a previously saved file to restore system parameters to a QM.',  () => {
+describe('UR(9) - Users must be able to use a previously saved file to restore system parameters to a QM.',  () => {
 
   // Perform authentication before running the tests
   beforeAll(async () => {
@@ -37,7 +37,7 @@ describe('UR(8) - Users must be able to use a previously saved file to restore s
 
        expect(response.status).toBe(200);
     } catch(error) {
-       console.log("An error occurred in testing: " + error?.status || error.message);
+      //  console.log("An error occurred in testing: " + error?.status || error.message);
        const response = error?.status || error.message;
 
        expect(response).toBe(200);
@@ -45,10 +45,11 @@ describe('UR(8) - Users must be able to use a previously saved file to restore s
   });
   
   it('POST request to the /qm/sysparm/upload with valid credentials + qmName + file returns response code 200', async () => {
-
+    
     // Create the body of the request with the file
     let data = new FormData();  
-    const filePath = '/Users/chriscocklin/Downloads/sysparms-MQ1A-1746717836886.json';
+    const filePath = path.join(__dirname, 'sysparm-test-files', 'sysparms-MQ1A-1746717836886-invalid.json');
+    // const filePath = '/Users/chriscocklin/Downloads/sysparms-MQ1A-1746717836886.json';
     if (!fs.existsSync(filePath)) {
       throw new Error(`File not found: ${filePath}`);
     }
@@ -80,4 +81,40 @@ describe('UR(8) - Users must be able to use a previously saved file to restore s
         expect(error.status).toBe(200);
       }
   });
+
+  // it('POST request to the /qm/sysparm/upload with invalid file format returns response code 500', async () => {
+  //   // Create the body of the request with the file
+  //   let data = new FormData();  
+  //   const filePath = '/Users/chriscocklin/Downloads/sysparms-MQ1A-1746717836886.txt';
+  //   if (!fs.existsSync(filePath)) {
+  //     throw new Error(`File not found: ${filePath}`);
+  //   }
+  //   data.append('sysParms', fs.createReadStream(filePath));
+
+  //   // Build the body of the request including the file
+  //   let config = {
+  //     method: 'post',
+  //     timeout: 10000,
+  //     maxBodyLength: Infinity,
+  //     url: serverURL + "qm/sysparms/upload?qmName=" + testQueueManager,
+  //     headers: {
+  //       'Cookie' : ltpaToken2,
+  //       ...data.getHeaders()
+  //       },
+  //     data: data
+  //   }
+
+  //   try {
+  //     let response;
+
+  //     // send the request to update the parameter
+  //     response = await axios.request(config);
+
+  //     // check response status
+  //     expect(response.status).toBe(500);
+  //     }
+  //     catch (error) {
+  //       expect(error.status).toBe(500);
+  //     }
+  // });
 });

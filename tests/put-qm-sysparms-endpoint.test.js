@@ -26,7 +26,7 @@ let validCredentialsConfig = {
 /**
  * Endpoint testing for PUT /qm/sysparms
 */
-describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms',  () => {
+describe('UR(4) - The PUT qm/sysparms endpoint should be able to update sysparms',  () => {
 
   // Perform authentication before running the tests
   beforeAll(async () => {
@@ -56,7 +56,7 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
     }
   });
   
-  it('UR(6.2) - should update INBUFF parameter to 28-60 int', async () => {
+  it('UR(4.2) - should update INBUFF parameter to 28-60 int', async () => {
 
     // sets inbuff to a random value between 28-60
     let inbuffValue = getRandomInt(28, 60);
@@ -110,7 +110,7 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
 
   });
 
-  it('UR(6.2) - should update TWOARCH parameter to YES/NO', async () => {
+  it('UR(4.2) - should update TWOARCH parameter to YES/NO', async () => {
   let twoarchValue = getRandomYesOrNo();
 
   let tokenConfig = {
@@ -152,7 +152,7 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
   }
   });
 
-  it('UR(6.2) - should update ARCWRTC parameter to random (1,3,4)', async () => {
+  it('UR(4.2) - should update ARCWRTC parameter to random (1,3,4)', async () => {
     let arcwrtcValue = '(1,' + getRandomInt(1, 4) + ',4)';
 
     let tokenConfig = {
@@ -194,7 +194,7 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
     }
   });
 
-  it('UR(6.2) - should update OTMACON parameter to (MQSERIES,,DFSYDRU0,2147483647,CSQ) with random account number', async () => {
+  it('UR(4.2) - should update OTMACON parameter to (MQSERIES,,DFSYDRU0,2147483647,CSQ) with random account number', async () => {
     let otmaconValue = '(MQSERIES,,DFSYDRU0,' + getRandomInt(1000000000, 5000000000) + ',CSQ)';
 
     let tokenConfig = {
@@ -236,7 +236,7 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
     }
   });
 
-  it('UR(6.2) - should update TRACSTR parameter to YES/NO', async () => {
+  it('UR(4.2) - should update TRACSTR parameter to YES/NO', async () => {
     let tracstrValue = getRandomYesOrNo();
 
     let tokenConfig = {
@@ -278,7 +278,7 @@ describe('UR(6) - The PUT qm/sysparms endpoint should be able to update sysparms
     }
   });
 
-  it('UR(6.2) - should update EXITLIM parameter to 0-30 int', async () => {
+  it('UR(4.2) - should update EXITLIM parameter to 0-30 int', async () => {
     let exitlimValue = getRandomInt(1, 30);
 
     let tokenConfig = {
